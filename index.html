@@ -1,0 +1,1644 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>殘酷身體賭博遊戲</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Sans+TC:wght@400;700&family=VT323&display=swap">
+<style>
+/* Layout: one centred column. A 16:9 pixel table viewport sits above a two-column control deck; the route map is a vertical climb. Committed single dark world: ink, wine felt, blood, bone, with cyan only as glitch residue. */
+:root{
+  --ink:#0b0708;--panel:#140a0c;--line:#3b2328;--blood:#d1122b;--bone:#ebe5dc;--ash:#9a8b8e;--cold:#19e3ff;
+  --fd:"DotGothic16","Noto Sans TC",sans-serif;--fb:"Noto Sans TC",system-ui,sans-serif;--fm:"VT323","Noto Sans TC",monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--bone);font:15px/1.65 var(--fb);
+  padding-block:12px 32px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.26) 0 1px,transparent 1px 3px)}
+#app{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+h1,h2{font-family:var(--fd);font-weight:400;margin:0;letter-spacing:.08em;text-wrap:balance}
+h1{font-size:clamp(34px,8.5vw,84px);line-height:1.15}
+h2{font-size:clamp(24px,5vw,36px)}
+p{margin:0}
+.mut{color:var(--ash)}.sm{font-size:12.5px}
+.screen{display:flex;flex-direction:column;gap:16px}
+.screen>p{max-width:62ch}
+
+/* HUD */
+#hud{display:flex;flex-wrap:wrap;align-items:center;gap:4px 20px;font-family:var(--fm);font-size:24px;letter-spacing:.05em;line-height:1.2}
+#hud .k{font-family:var(--fd);font-size:13px;color:var(--ash);margin-right:6px;letter-spacing:.15em}
+#hud .grow{flex:1}
+#hud button{font-size:13px;min-height:32px;padding:2px 10px}
+
+/* Controls */
+button{font:inherit;color:var(--bone);background:var(--ink);border:1px solid var(--bone);border-radius:0;
+  padding:8px 16px;min-height:42px;cursor:pointer;font-family:var(--fd);letter-spacing:.08em}
+button:hover:not(:disabled){background:var(--bone);color:var(--ink)}
+button:focus-visible{outline:2px solid var(--cold);outline-offset:2px}
+button:disabled{opacity:.32;cursor:not-allowed}
+button.danger{background:var(--blood);border-color:var(--blood)}
+button.danger:hover:not(:disabled){background:var(--bone);color:var(--blood);border-color:var(--bone)}
+
+/* Title */
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{content:attr(data-t);position:absolute;left:0;top:0;width:100%;pointer-events:none}
+.glitch::before{color:var(--blood);clip-path:inset(0 0 55% 0);transform:translate(3px,0);animation:gl1 2.6s steps(1) infinite}
+.glitch::after{color:var(--cold);clip-path:inset(55% 0 0 0);transform:translate(-3px,0);opacity:.8;animation:gl2 3.3s steps(1) infinite}
+@keyframes gl1{0%,86%{transform:translate(3px,0)}88%{transform:translate(-9px,2px)}93%{transform:translate(7px,-2px)}100%{transform:translate(3px,0)}}
+@keyframes gl2{0%,70%{transform:translate(-3px,0)}72%{transform:translate(10px,1px)}76%{transform:translate(-6px,-1px)}100%{transform:translate(-3px,0)}}
+.rules{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.rules div{border-left:2px solid var(--blood);padding:2px 0 2px 12px}
+.rules b{font-family:var(--fd);letter-spacing:.1em;display:block}
+
+/* Battle: opponent bar, then a full-width 16:9 table stage with two wheels overlaid on the bottom corners */
+.box{background:var(--panel);border:1px solid var(--line);padding:12px;min-width:0}
+.oppbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:8px 14px}
+.oppbar b{font-family:var(--fd);font-size:20px;letter-spacing:.1em}
+.oppbar .right{display:flex;align-items:center;gap:14px}
+.oppbar .right button{font-size:13px;min-height:32px;padding:2px 12px}
+.tag{display:inline-block;border:1px solid var(--blood);color:var(--blood);font-size:12px;padding:0 6px;margin-left:8px;vertical-align:middle}
+.meter{display:grid;grid-template-columns:auto minmax(110px,180px);gap:4px 10px;align-items:center;font-size:12px;color:var(--ash)}
+.bar{height:8px;background:#2a1a1d;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--blood);transition:width .5s}
+.bar.t i{background:var(--bone)}
+.pips{font-family:var(--fm);font-size:22px;letter-spacing:.1em}
+.bwrap{display:flex;flex-direction:column;gap:10px}
+
+.stage{position:relative;align-self:center;width:min(100%,max(560px,calc((100vh - 200px) * 16 / 9)));container-type:inline-size}
+.vp{position:relative;aspect-ratio:16/9;width:100%;background:#000;border:1px solid var(--line);overflow:hidden}
+.vp canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
+.vp::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.78))}
+/* Speech bubble sits beside the portrait's head with a tail toward the mouth, so the line reads as spoken by him. */
+#bubble{position:absolute;right:58.5%;top:13%;max-width:37%;z-index:2;background:var(--ink);border:1px solid var(--bone);
+  padding:.5cqw 1.2cqw;font-size:clamp(11px,1.7cqw,17px);line-height:1.5;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
+#bubble.on{opacity:1;transform:none}
+#bubble::after{content:"";position:absolute;right:-.9cqw;top:55%;width:1.2cqw;height:1.2cqw;background:var(--ink);border-top:1px solid var(--bone);border-right:1px solid var(--bone);transform:rotate(45deg)}
+#bidBanner{position:absolute;right:2.5%;top:5%;max-width:32%;z-index:2;text-align:right;font-size:clamp(11px,1.7cqw,17px);line-height:1.5;
+  background:rgba(11,7,8,.85);border:1px solid var(--line);padding:4px 10px}
+#bidBanner small{display:block;color:var(--ash);font-size:.78em}
+#bidBanner b{font-family:var(--fm);font-size:1.6em;color:var(--blood);font-weight:400}
+#note{position:absolute;left:50%;top:75%;transform:translateX(-50%);max-width:44%;z-index:2;text-align:center;pointer-events:none;
+  font-size:clamp(11px,1.6cqw,15px);line-height:1.5;background:rgba(11,7,8,.88);border:1px solid var(--line);padding:2px 10px;opacity:0;transition:opacity .25s}
+#note.on{opacity:1}
+#flash{position:absolute;inset:0;z-index:3;display:grid;place-items:center;pointer-events:none;opacity:0;
+  font-family:var(--fd);font-size:clamp(30px,9cqw,92px);letter-spacing:.12em;color:var(--bone);text-shadow:4px 0 var(--blood),-4px 0 var(--cold)}
+#flash.on{opacity:1}
+#deal{position:absolute;inset:0;z-index:7;display:grid;place-items:center;background:rgba(11,7,8,.72)}
+#deal[hidden]{display:none}
+#deal .dl{background:var(--ink);border:1px solid var(--bone);padding:clamp(10px,2cqw,22px);max-width:min(70%,460px);text-align:center;font-size:clamp(11px,1.6cqw,16px);line-height:1.6}
+#deal h3{margin:0;font:400 clamp(13px,1.8cqw,18px) var(--fd);letter-spacing:.2em;color:var(--ash)}
+#deal .of{font:clamp(16px,2.6cqw,28px) var(--fd);letter-spacing:.08em;color:var(--bone);margin:6px 0}
+#deal .dlb{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+#deal .dlb button{min-height:0;padding:.5cqw 1.4cqw;font-size:clamp(11px,1.6cqw,16px)}
+/* Odd/even bet wheel shown when the player loses a die */
+#bet{position:absolute;inset:0;z-index:7;display:grid;place-items:center;background:rgba(11,7,8,.93)}
+#bet[hidden]{display:none}
+#bet .bp{display:flex;align-items:center;gap:2.4cqw;width:min(86%,820px)}
+#betWheel{flex:0 0 40%;width:40%;height:auto;filter:drop-shadow(0 0 1.2cqw rgba(0,0,0,.9))}
+#betG{transform-origin:200px 200px}
+.bs{stroke:var(--ash);stroke-width:1.5;stroke-opacity:.6}.bs.od{fill:#3b0f18}.bs.ev{fill:#2a2625}
+.bn{font-family:var(--fm);fill:var(--bone);text-anchor:middle;dominant-baseline:central}
+.bc{fill:var(--ink);stroke:var(--bone);stroke-width:3}
+.bnum{font-family:var(--fm);fill:var(--blood);text-anchor:middle;dominant-baseline:central}
+#bet .bx{flex:1;text-align:left;font-size:clamp(11px,1.7cqw,17px);line-height:1.7}
+#bet h3{margin:0 0 .6cqw;font:400 clamp(14px,2.3cqw,24px) var(--fd);letter-spacing:.1em;color:var(--bone)}
+#bet h3 b{color:var(--blood);font-weight:400}
+#bet .dlb{display:flex;flex-wrap:wrap;gap:8px;margin-top:1cqw}
+#bet .dlb button{min-height:0;padding:.6cqw 2.4cqw;font-size:clamp(13px,2.1cqw,22px);letter-spacing:.2em}
+#bet .dlb button.bo{background:#6a1626;border-color:#ff8a98;color:var(--bone)}
+#bet .dlb button.be{background:#2a2625;border-color:var(--bone);color:var(--bone)}
+#bet .dlb button.bo:hover:not(:disabled){background:var(--bone);color:#6a1626}
+#bet .dlb button.be:hover:not(:disabled){background:var(--bone);color:#2a2625}
+/* Cut / seize animation: freeze, red flash, the part's glyph is split by a slash and falls apart */
+#cut{position:absolute;inset:0;z-index:8;display:grid;place-items:center;pointer-events:none}
+#cut[hidden]{display:none}
+.cutbg{position:absolute;inset:0;background:radial-gradient(circle,rgba(209,18,43,.8),rgba(11,7,8,.94));opacity:0}
+.cutcard{position:relative;width:20cqw;height:20cqw}
+.half{position:absolute;inset:0;display:grid;place-items:center;background:var(--ink);border:.5cqw solid var(--bone);font:15cqw/1 var(--fd);color:var(--bone);opacity:0}
+.h1{clip-path:polygon(0 0,100% 0,100% 28%,0 72%)}.h2{clip-path:polygon(0 72%,100% 28%,100% 100%,0 100%)}
+.slash{position:absolute;width:30cqw;height:30cqw;overflow:visible}
+.slash line{stroke:var(--bone);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;opacity:0;filter:drop-shadow(0 0 2px var(--blood)) drop-shadow(0 0 5px var(--blood))}
+.cutlbl{position:absolute;bottom:14%;font:400 clamp(14px,2.6cqw,28px) var(--fd);letter-spacing:.14em;color:var(--bone);text-shadow:3px 0 var(--blood),-3px 0 var(--cold);opacity:0}
+.stamp{position:absolute;font:clamp(24px,8cqw,84px) var(--fd);letter-spacing:.2em;color:var(--blood);border:.6cqw solid var(--blood);padding:0 1.6cqw;transform:rotate(-12deg) scale(2);opacity:0;display:none;background:rgba(11,7,8,.7)}
+#cut.go .cutbg{animation:cbg 2.1s both}
+#cut.go .half{animation:hin .12s both}
+#cut.cut.go .slash line{animation:sl 2s both}
+#cut.cut.go .h1{animation:hin .12s both,h1 2s .55s both cubic-bezier(.5,0,.8,.6)}
+#cut.cut.go .h2{animation:hin .12s both,h2 2s .55s both cubic-bezier(.5,0,.8,.6)}
+#cut.cut.go .cutlbl{animation:lbl 2s .8s both}
+#cut.seize .h2,#cut.seize .slash{display:none}
+#cut.seize .h1{clip-path:none}
+#cut.seize .stamp{display:block}
+#cut.seize.go .stamp{animation:stp 1.2s .1s both}
+#cut.seize.go .cutlbl{animation:lbl 1.2s .35s both}
+#cut.seize.go .cutbg{animation:cbg 1.3s both;background:radial-gradient(circle,rgba(154,139,142,.35),rgba(11,7,8,.94))}
+@keyframes cbg{0%{opacity:0}8%{opacity:1}75%{opacity:1}100%{opacity:0}}
+@keyframes hin{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+@keyframes sl{0%,12%{stroke-dashoffset:100;opacity:0}14%{opacity:1}28%{stroke-dashoffset:0;opacity:1}70%{opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes h1{0%{transform:none;opacity:1}100%{transform:translate(-5cqw,9cqw) rotate(-24deg);opacity:0}}
+@keyframes h2{0%{transform:none;opacity:1}100%{transform:translate(5cqw,14cqw) rotate(28deg);opacity:0}}
+@keyframes lbl{0%{opacity:0;transform:translateY(8px)}25%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes stp{0%{opacity:0;transform:rotate(-12deg) scale(2.4)}22%{opacity:1;transform:rotate(-12deg) scale(1)}80%{opacity:1}100%{opacity:0}}
+.org.seized{border-style:dashed;color:var(--ash)}
+#logPanel{position:absolute;right:0;top:0;bottom:0;width:min(44%,340px);z-index:6;background:var(--ink);border-left:1px solid var(--line);padding:10px 12px;overflow:auto;font-size:13px;line-height:1.6}
+#log{color:var(--ash)}
+#log .me{color:var(--bone)}#log .opp{color:#e8808c}#log .sys{color:var(--ash)}#log .leak{color:var(--cold)}
+.vp.invert{filter:invert(1)}
+.vp.shake{animation:shake .5s}
+.vp.hit{box-shadow:inset 0 0 0 4px var(--blood),inset 0 0 90px var(--blood)}
+@keyframes shake{0%,100%{transform:none}15%{transform:translate(-9px,4px)}30%{transform:translate(8px,-5px)}45%{transform:translate(-6px,-3px)}60%{transform:translate(5px,5px)}80%{transform:translate(-2px,1px)}}
+
+/* Wheels */
+.ctrl{position:absolute;bottom:1.2cqw;z-index:5;width:25cqw;display:flex;flex-direction:column;gap:.8cqw}
+.ctrlL{left:1.2cqw}.ctrlR{right:1.2cqw}
+.wheel{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 0 1.2cqw rgba(0,0,0,.9))}
+.wheel:focus-visible{outline:2px solid var(--cold);outline-offset:3px;border-radius:50%}
+.wheel.off{opacity:.45;pointer-events:none}
+.ring{transform-origin:200px 200px;transition:transform .26s cubic-bezier(.2,.9,.25,1);cursor:grab}
+.wheel.drag .ring{cursor:grabbing}
+.sp{stroke:var(--ash);stroke-width:1.5;stroke-opacity:.55}
+.sp.a{fill:#150b0e}.sp.b{fill:#211116}
+.slot.on .sp{fill:#3a1118}
+.slot.dim{opacity:.28}
+.sl{font-family:var(--fd);fill:var(--bone);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.ss{font-family:var(--fm);fill:var(--blood);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.win{fill:rgba(209,18,43,.16);stroke:var(--blood);stroke-width:3;pointer-events:none}
+.mk{fill:var(--blood);pointer-events:none}
+.cbtn{cursor:pointer}
+.cc{fill:var(--blood);stroke:var(--bone);stroke-width:3}
+.cbtn:hover .cc{fill:#ff2a45}
+.cbtn:focus-visible .cc{stroke:var(--cold);stroke-width:6}
+.cbtn.dis{opacity:.4;pointer-events:none}
+.ct{font-family:var(--fd);fill:var(--bone);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.pill{width:100%;min-height:0;padding:.7cqw 1cqw;font-size:clamp(11px,1.6cqw,16px);line-height:1.4;background:rgba(11,7,8,.9)}
+.pill.danger{background:var(--blood)}
+.items{display:flex;gap:.8cqw}
+.itm{flex:1;min-height:0;padding:.5cqw 0;font-size:clamp(12px,1.8cqw,17px);background:rgba(11,7,8,.9)}
+.itm i{font:normal clamp(11px,1.4cqw,14px) var(--fm);margin-left:2px}
+.info{background:rgba(11,7,8,.9);border:1px solid var(--line);padding:.8cqw 1cqw;font-size:clamp(10.5px,1.35cqw,14px);line-height:1.5}
+.info .ih{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.info b{font-family:var(--fd);font-size:clamp(14px,2cqw,20px);letter-spacing:.1em;font-weight:400}
+.info .pp{font-family:var(--fm);color:var(--blood);letter-spacing:.2em;font-size:clamp(14px,2cqw,20px)}
+.info .nb{color:var(--blood)}
+
+/* Bid wheel: outer ring = dice faces (bone), inner ring = quantities (blood), the grabbed ring lights up and the other dims */
+.ring.ro .sp.a{fill:#27201f}.ring.ro .sp.b{fill:#332a29}.ring.ro .sp{stroke:var(--bone);stroke-opacity:.45}
+.ring.ri .sp.a{fill:#2a0a10}.ring.ri .sp.b{fill:#3b0f18}.ring.ri .sp{stroke:var(--blood);stroke-opacity:.7}
+.ring.ro .slot.on .sp{fill:#5a4c46}.ring.ri .slot.on .sp{fill:#6a1626}
+.ring.ri .sl{fill:#ff8a98}
+.pf{fill:#f6f1e9;stroke:#ebe5dc;stroke-width:1.5}.pp2{fill:#0b0708}
+.wheel[data-act="o"] .ring.ri{opacity:.3}.wheel[data-act="i"] .ring.ro{opacity:.3}
+.wheel[data-act="o"] .ring.ro .sp{stroke-opacity:1;stroke-width:3}.wheel[data-act="i"] .ring.ri .sp{stroke-opacity:1;stroke-width:3}
+.ring{transition:transform .26s cubic-bezier(.2,.9,.25,1),opacity .15s}
+.chip{display:inline-block;width:.8em;height:.8em;vertical-align:-1px;margin-right:2px;border:1px solid var(--bone)}
+.chip.co{background:#e9e1d6}.chip.ci{background:#6a1626;border-color:#ff8a98}
+.pill b{font-family:var(--fm);font-weight:400;font-size:1.35em}
+.dsv{vertical-align:-.28em}
+.need{min-height:1.5em;text-align:center;font-size:clamp(10.5px,1.4cqw,14px);color:var(--ash);line-height:1.5}
+.need .dsv{vertical-align:-.2em}
+#btnBid{display:flex;align-items:center;justify-content:center;gap:.5cqw}
+#btnBid .bx{font-family:var(--fm);font-size:1.6em}
+#btnBid b{font-family:var(--fm);font-weight:400;font-size:1.9em;line-height:1}
+#btnBid .dsv{width:1.9em;height:1.9em}
+
+@media(max-width:760px){
+  .stage{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px;container-type:normal}
+  .vp{grid-column:1/-1}
+  .ctrl{position:static;width:auto;gap:6px}
+  #logPanel{width:70%}
+  #note{top:70%;max-width:90%}
+  #bet .bp{width:96%;gap:2cqw}
+  #betWheel{flex-basis:44%;width:44%}
+  #bubble{right:58%;top:5%;max-width:40%;font-size:11px;padding:3px 7px}
+  #bidBanner{max-width:38%;top:3%;font-size:11px}
+}
+
+/* Map, shop, event */
+.map{width:100%;max-width:520px;margin:0 auto;display:block}
+.map line{stroke:var(--line);stroke-width:2}
+.map line.on{stroke:var(--ash)}
+.node rect{fill:var(--panel);stroke:var(--ash);stroke-width:2}
+.node text{font-family:var(--fd);font-size:20px;fill:var(--bone);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.node.battle rect{stroke:var(--blood)}.node.shop rect{stroke:var(--bone)}.node.event rect{stroke:var(--cold)}
+.node.boss rect{stroke:var(--blood);fill:#2a0a10}
+.node.done{opacity:.3}.node.locked{opacity:.55}.node.now rect{fill:var(--blood)}
+.node.open{cursor:pointer}.node.open rect{animation:pulse 1.2s steps(2) infinite}
+.node:focus-visible rect{stroke:var(--cold);stroke-width:5}
+@keyframes pulse{50%{stroke-width:5}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ash);justify-content:center}
+.shop{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.shop button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 14px;font-family:var(--fb);letter-spacing:0}
+.shop button b{font-family:var(--fd);font-size:17px;letter-spacing:.1em}
+.shop button span{font-size:13px;opacity:.85}
+.shop .price{font-family:var(--fm);font-size:20px;color:var(--blood)}
+.shop button:hover:not(:disabled) .price{color:var(--ink)}
+.evt{display:flex;flex-direction:column;gap:8px;max-width:520px}
+.evt button{text-align:left}
+.res{color:var(--bone);border-left:2px solid var(--blood);padding-left:12px}
+h2.kill{color:var(--blood)}
+
+/* Body, sanity, glitch */
+.box h3{margin:0 0 6px;font:400 13px var(--fd);letter-spacing:.2em;color:var(--ash)}
+.org{display:inline-grid;place-items:center;width:26px;height:26px;border:1px solid var(--bone);font:15px/1 var(--fd);margin-right:3px;vertical-align:middle;color:var(--bone)}
+.org.lost{border-color:#4a3338;color:#6a4a50;background:repeating-linear-gradient(135deg,transparent 0 3px,#2a1a1d 3px 5px)}
+.org.pro{border-color:var(--cold);color:var(--cold)}
+.org.tx{border-color:var(--blood);color:var(--blood);background:#2a0a10}
+.sbar{display:inline-block;width:90px;height:8px;background:#2a1a1d;vertical-align:middle;margin-right:6px;position:relative}
+.sbar i{position:absolute;inset:0 auto 0 0;background:var(--bone);width:100%;transition:width .4s}
+#hud.low .sbar i{background:var(--blood)}
+#hud.low #hSan{color:var(--blood)}
+body.collapsed #hud{animation:hudj .7s steps(1) infinite}
+@keyframes hudj{0%,85%{transform:none}90%{transform:translate(3px,-1px)}95%{transform:translate(-4px,1px)}}
+#bodyPanel{max-width:520px;width:100%;margin:0 auto}
+.brow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.brow .org{margin:0}
+.bt b{font-family:var(--fd);font-weight:400;letter-spacing:.08em;display:block}
+.bt span{display:block;font-size:12.5px;color:var(--ash);line-height:1.5}
+.bt .bw{color:#e8808c}
+.bm{display:flex;gap:4px}
+.bm button{min-height:30px;padding:0 10px}
+.nb{color:var(--blood)}
+.bar.blind{background:repeating-linear-gradient(90deg,#2a1a1d 0 4px,#1a0f11 4px 8px)}
+.bar.blind i{display:none}
+.items .cap{align-self:center;font:clamp(11px,1.3cqw,13px) var(--fm);color:var(--ash);white-space:nowrap;padding-left:2px}
+#log .warn{color:var(--blood)}
+.ghost,#log .ghost{color:var(--blood)!important;text-shadow:2px 0 var(--cold),-2px 0 var(--blood);animation:ghj .22s steps(2) infinite}
+@keyframes ghj{0%{transform:translate(0,0)}50%{transform:translate(1px,-1px)}100%{transform:translate(-1px,1px)}}
+.org.next{outline:1px dashed var(--blood);outline-offset:2px}
+.pips .org{width:22px;height:22px;font-size:13px}
+.stage[data-gl="1"] .wheel{animation:wj1 2.8s steps(1) infinite}
+.stage[data-gl="2"] .wheel{animation:wj2 1.6s steps(1) infinite}
+.stage[data-gl="3"] .wheel{animation:wj3 .9s steps(1) infinite}
+.stage[data-gl="4"] .wheel{animation:wj3 .45s steps(1) infinite}
+@keyframes wj1{0%,92%{transform:none}94%{transform:translate(2px,-1px)}97%{transform:translate(-3px,1px)}100%{transform:none}}
+@keyframes wj2{0%,80%{transform:none}82%{transform:translate(4px,2px) skewX(3deg)}86%{transform:translate(-5px,-2px)}90%{transform:translate(3px,0) skewX(-4deg)}100%{transform:none}}
+@keyframes wj3{0%,55%{transform:none}58%{transform:translate(8px,3px) skewX(6deg);filter:hue-rotate(90deg)}62%{transform:translate(-9px,-3px) skewX(-6deg)}70%{transform:translate(5px,0)}80%,100%{transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  .ghost{animation:none}
+  .glitch::before,.glitch::after,.vp.shake,.node.open rect,#cut.go *{animation:none!important}
+  .ring{transition:none!important}
+  .stage[data-gl] .wheel,body.collapsed #hud{animation:none}
+  #cut.go .half,#cut.go .cutlbl,#cut.go .cutbg,#cut.seize.go .stamp{opacity:1}
+}
+</style>
+
+<div id="app">
+  <header id="hud" hidden>
+    <span><span class="k">身</span><span id="hBody"></span></span>
+    <span><span class="k">理智</span><span class="sbar"><i id="hSanBar"></i></span><span id="hSan"></span></span>
+    <span><span class="k">金</span><span id="hGold"></span></span>
+    <span><span class="k">罪孽</span><span id="hSin"></span></span>
+    <span><span class="k">層</span><span id="hFloor"></span></span>
+    <span class="grow"></span>
+    <button id="btnMute" type="button">音 ON</button>
+  </header>
+
+  <section id="scTitle" class="screen">
+    <h1 class="glitch" data-t="殘酷身體賭博遊戲">殘酷身體賭博遊戲</h1>
+    <p class="mut">吹牛骰 × 話術 × 路線選擇　原型 v0</p>
+    <div class="rules">
+      <div><b>賭</b>各有一副骰子，只看得到自己的。輪流叫牌，或喊「你說謊」。輸的人失去一顆骰子。</div>
+      <div><b>說</b>用話術降低對手的理智、累積信任。找出他的心結，攢到足夠的信任，就能談條件，一起離桌。</div>
+      <div><b>殺</b>贏到對手沒有骰子，他就死了。獎勵更多，罪孽也會留下。</div>
+    </div>
+    <div><button id="btnStart" class="danger" type="button">入座</button></div>
+    <p class="mut sm">按下後會啟動音效，右上角可隨時關閉。</p>
+  </section>
+
+  <section id="scMap" class="screen" hidden>
+    <h2>選擇下一張桌子</h2>
+    <svg id="mapSvg" class="map" viewBox="0 0 400 560" role="group" aria-label="路線地圖"></svg>
+    <div class="legend"><span>戰＝賭局</span><span>店＝商店</span><span>事＝事件</span><span>王＝荷官</span></div>
+    <div id="bodyPanel" class="box"></div>
+  </section>
+
+  <section id="scBattle" hidden>
+    <div class="bwrap">
+      <div class="oppbar">
+        <div><b id="oName"></b><span id="oTag" class="tag"></span><div id="oHint" class="mut sm"></div></div>
+        <div class="meter"><span id="lSan">理智</span><div class="bar"><i id="bSan"></i></div><span id="lTru">信任</span><div class="bar t"><i id="bTru"></i></div></div>
+        <div class="right"><div id="oPips" class="pips"></div><button id="btnLog" type="button" aria-expanded="false">紀錄</button></div>
+      </div>
+      <div class="stage" id="stage">
+        <div id="vp" class="vp">
+          <canvas id="cv" width="320" height="180" aria-label="牌桌"></canvas>
+          <div id="bubble"></div>
+          <div id="bidBanner"></div>
+          <div id="note"></div>
+          <div id="logPanel" hidden><div id="log"></div></div>
+          <div id="flash"></div>
+          <div id="deal" hidden></div>
+          <div id="bet" hidden><div class="bp"><svg id="betWheel" viewBox="0 0 400 400" role="img" aria-label="單雙輪盤"></svg><div class="bx"><h3 id="betT"></h3><p id="betMsg"></p><div id="betBtn" class="dlb"></div></div></div></div>
+          <div id="cut" class="cut" hidden><div class="cutbg"></div><div class="cutcard"><div class="half h1"><span></span></div><div class="half h2"><span></span></div></div><svg class="slash" viewBox="0 0 100 100" aria-hidden="true"><line x1="6" y1="69" x2="94" y2="31" pathLength="100"/></svg><div class="stamp">沒收</div><div id="cutLbl" class="cutlbl"></div></div>
+        </div>
+        <div class="ctrl ctrlL">
+          <div id="items" class="items"></div>
+          <button id="btnBid" class="pill danger" type="button"></button>
+          <div id="bidNeed" class="need"></div>
+          <svg id="bidWheel" class="wheel" viewBox="0 0 400 400" tabindex="0" role="group" aria-label="叫牌轉盤。外環選點數，內環選數量，中央喊你說謊。方向鍵轉動，Enter 叫牌。"></svg>
+        </div>
+        <div class="ctrl ctrlR">
+          <div id="talkInfo" class="info"></div>
+          <svg id="talkWheel" class="wheel" viewBox="0 0 400 400" tabindex="0" role="group" aria-label="話術轉盤。左右鍵轉動，Enter 說出口。"></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="scShop" class="screen" hidden></section>
+  <section id="scEvent" class="screen" hidden></section>
+  <section id="scTx" class="screen" hidden></section>
+  <section id="scEnd" class="screen" hidden></section>
+</div>
+<script>
+/* ---------- Body (organs are dice) & player sanity ---------- */
+const ORGS=['hand','ear','eye','tongue','heart'];
+const ON={hand:'手',ear:'耳',eye:'眼',tongue:'舌',heart:'心'};
+const PRO_PRICE={hand:40,ear:40,eye:55,tongue:55};
+const MAX_FIX=2,REPAIR_PRICE=90;
+const ORG_INFO={
+  hand:{ok:'道具每回合可用 2 次。',lost:'道具每回合只能用 1 次，操作故障加倍。',boss:'道具全部封鎖',pro:'義手：道具每回合可用 2 次，但每次使用理智 −4。'},
+  ear:{ok:'聽得到對手失言。',lost:'聽不到對手失言，對手的話變得破碎，音效悶住。',boss:'「共情」與「提起往事」無法使用',pro:'義耳：聽得到失言，但有 30% 是假情報。'},
+  eye:{ok:'看得到對手的理智與信任。',lost:'看不到對手的理智與信任，視覺故障加倍。',boss:'你的骰子每回合有一半看不見',pro:'義眼：看得到理智與信任，但數字會亂跳。'},
+  tongue:{ok:'話術點 2。',lost:'話術點 1，無法談判，話術名稱會變成亂碼。',boss:'完全無法使用話術',pro:'義舌：話術點 2，但 25% 會說錯而無效。'},
+  heart:{ok:'最後一個器官。失去它就是死亡。',lost:'',boss:''}
+};
+const TX={
+  hand:{up:'道具每回合可用 3 次',down:'每回合開始理智 −2'},
+  tongue:{up:'話術點 3',down:'每次使用話術理智 −3'},
+  eye:{up:'每回合開始自動偷看對手一顆骰子，並看得到理智與信任',down:'每回合開始理智 −3'},
+  ear:{up:'對手理智低於 65 就會失言，而且一定是真的',down:'每回合開始理智 −2'}
+};
+ORG_INFO.hand.gain='斷腕：你喊「你說謊」猜對時，對手理智額外 −12。';
+ORG_INFO.ear.gain='充耳不聞：對手對你說的話，理智傷害減半。';
+ORG_INFO.eye.gain='心眼：每回合開始，得知他手上數量最多的點數。';
+ORG_INFO.tongue.gain='無聲的壓迫：「威嚇」與「戳破謊言」的理智傷害 ×1.5。';
+function freshBody(){
+  const b={order:['hand','ear','eye','tongue'],slots:{}};
+  ORGS.forEach(k=>{b.slots[k]={st:'ok'};});
+  return b;
+}
+const st=k=>S.body.slots[k].st;
+const lostK=k=>st(k)==='lost';
+const aliveCount=()=>ORGS.filter(k=>st(k)!=='lost').length;
+const bossNow=()=>!!(typeof B!=='undefined'&&B&&B.boss);
+function itemCap(){const s=st('hand');if(s==='lost') return bossNow()?0:1;return s==='tx'?3:2;}
+function talkCap(){const s=st('tongue');if(s==='lost') return bossNow()?0:1;return s==='tx'?3:2;}
+/* Talk points are a pool that carries over: +1 every round, +1 for winning a round, +1 more for catching a bluff. The pool holds one more than the old per-round allowance. */
+function talkMax(){const c=talkCap();return c>0?c+1:0;}
+function nextLoseKey(){for(const k of [...S.body.order,'heart']) if(st(k)!=='lost') return k;return null;}
+function loseNext(){const k=nextLoseKey();if(k) S.body.slots[k]={st:'lost'};return k;}
+/* Seized = lost only for this fight (the player won the bet); restored when the fight ends. */
+function seizePart(k){const prev=S.body.slots[k];S.body.slots[k]={st:'lost',seized:true,prev};return k;}
+function restoreSeized(){let n=0;ORGS.forEach(k=>{const s=S.body.slots[k];if(s.seized){S.body.slots[k]=s.prev||{st:'ok'};n++;}});return n;}
+function orgState(k){
+  const s=S.body.slots[k];
+  return s.st==='ok'?'原生':s.st==='lost'?(s.seized?'被沒收':s.pledged?'已抵押':'已失去'):s.st==='pro'?'義體':'移植：'+s.name;
+}
+function effectText(k){
+  const s=S.body.slots[k];
+  if(s.st==='tx') return `${TX[k].up}。代價：${TX[k].down}。`;
+  if(s.st==='lost'&&ORG_INFO[k].gain) return `${ORG_INFO[k].lost} 新能力：${ORG_INFO[k].gain}`;
+  return ORG_INFO[k][s.st];
+}
+
+/* ---------- Player sanity & glitch ---------- */
+const GLY='▓▒░█▄▀';
+function garble(t,p){
+  return [...t].map(c=>(/\s/.test(c)||'，。！？「」…、：（）'.includes(c))?c:(Math.random()<p?GLY[Math.floor(Math.random()*GLY.length)]:c)).join('');
+}
+const sanStage=()=>{const v=S.san;return v>=65?0:v>=40?1:v>=20?2:3;};
+function glitchLv(){
+  const stg=sanStage(),base=[0,.3,.6,1][stg];
+  return {stg,base,vis:clamp(base*(lostK('eye')?1.5:1),0,1),op:stg>=2?clamp(base*(lostK('hand')?1.6:1),0,1):0};
+}
+const opSlip=()=>Math.random()<glitchLv().op*0.55;
+function applyGlitchUI(){
+  const g=glitchLv();
+  const stg=document.getElementById('stage');
+  if(stg) stg.dataset.gl=String([0,0,2,3][g.stg]);
+  if(typeof SC!=='undefined'){SC.pg=g.vis;SC.pst=g.stg;}
+}
+const inBattleNow=()=>typeof B!=='undefined'&&!!B&&!!B.ch&&!B.over&&!document.getElementById('scBattle').hidden;
+function dSan(d){
+  S.san=clamp(S.san+d,0,100);
+  if(S.san<=0) sanBreak();
+  renderHud();applyGlitchUI();
+}
+function sanBreak(){
+  const k=loseNext();S.san=50;
+  if(!k) return;
+  if(k==='heart') log('理智斷裂。你的心臟停了。','warn');
+  else log(`理智崩裂。你失去了「${ON[k]}」，理智回到 50。`,'warn');
+  if(typeof AU!=='undefined') AU.hit();
+  if(typeof SC!=='undefined') SC.glitch=1;
+  if(inBattleNow()){
+    B.pHp=aliveCount();
+    while(B.pDice.length>B.pHp&&B.pDice.length>0) B.pDice.splice(rnd(0,B.pDice.length-1),1);
+    SC.pDice=B.pDice;SC.pN=B.pHp;
+    if(B.hide) B.hide=B.hide.filter(i=>i<B.pHp);
+    vpFx('shake',700);
+  }
+  if(k==='heart'){
+    if(inBattleNow()) defeat(); else setTimeout(()=>{if(lostK('heart')) showEnd('dead');},700);
+  }
+}
+'use strict';
+const $=(s,r=document)=>r.querySelector(s);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const S={gold:40,sin:0,san:100,repairs:0,spared:[],collapsed:false,items:{peek:1,reroll:0,gag:0},cur:null,nodes:[],layers:[],visited:{},body:freshBody()};
+const ITEMS={
+  peek:{name:'偷看',desc:'揭開對手一顆骰子'},
+  reroll:{name:'重骰',desc:'重骰你的全部骰子'},
+  gag:{name:'封口',desc:'對手這一輪不能對你說話，下一次也不能喊「你說謊」'}
+};
+
+/* ---------- Breakcore-ish procedural audio ---------- */
+const AU={ctx:null,master:null,noise:null,mode:'calm',tension:0,muted:false,step:0,next:0,timer:null};
+AU.init=function(){
+  if(this.ctx){ if(this.ctx.resume) this.ctx.resume(); return; }
+  const C=window.AudioContext||window.webkitAudioContext; if(!C) return;
+  const c=this.ctx=new C();
+  this.master=c.createGain(); this.master.gain.value=this.muted?0:.55;
+  const comp=c.createDynamicsCompressor(); this.lp=c.createBiquadFilter(); this.lp.type='lowpass'; this.lp.frequency.value=this.muf?650:20000; this.master.connect(this.lp); this.lp.connect(comp); comp.connect(c.destination);
+  const buf=c.createBuffer(1,c.sampleRate,c.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  this.noise=buf; this.next=c.currentTime+.1;
+  this.timer=setInterval(()=>this.tick(),30);
+};
+AU.kick=function(t){
+  const c=this.ctx,o=c.createOscillator(),g=c.createGain();
+  o.frequency.setValueAtTime(170,t); o.frequency.exponentialRampToValueAtTime(38,t+.13);
+  g.gain.setValueAtTime(.95,t); g.gain.exponentialRampToValueAtTime(.001,t+.24);
+  o.connect(g); g.connect(this.master); o.start(t); o.stop(t+.26);
+};
+AU.nz=function(t,type,freq,dec,vol){
+  const c=this.ctx,s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();
+  s.buffer=this.noise; f.type=type; f.frequency.value=freq;
+  g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+dec);
+  s.connect(f); f.connect(g); g.connect(this.master); s.start(t,Math.random()*.5); s.stop(t+dec+.02);
+};
+AU.snare=function(t,v=.5){
+  this.nz(t,'bandpass',1900,.13,v);
+  const c=this.ctx,o=c.createOscillator(),g=c.createGain();
+  o.type='triangle'; o.frequency.setValueAtTime(210,t); o.frequency.exponentialRampToValueAtTime(120,t+.08);
+  g.gain.setValueAtTime(v*.5,t); g.gain.exponentialRampToValueAtTime(.001,t+.1);
+  o.connect(g); g.connect(this.master); o.start(t); o.stop(t+.12);
+};
+AU.hat=function(t,v=.16){ this.nz(t,'highpass',7500,.04,v); };
+AU.drone=function(t,dur){
+  const c=this.ctx,o=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();
+  o.type='sawtooth'; o.frequency.value=pick([41.2,43.65,36.7]);
+  f.type='lowpass'; f.frequency.value=180;
+  g.gain.setValueAtTime(.0001,t); g.gain.linearRampToValueAtTime(.12,t+dur*.5); g.gain.linearRampToValueAtTime(.0001,t+dur);
+  o.connect(f); f.connect(g); g.connect(this.master); o.start(t); o.stop(t+dur+.05);
+};
+AU.tick=function(){
+  const c=this.ctx; if(!c) return;
+  while(this.next<c.currentTime+.15){
+    const battle=this.mode==='battle';
+    const bpm=battle?118+this.tension*95:62, sd=60/bpm/4, s=this.step%16, t=this.next;
+    if(battle){
+      const K=[1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0], N=[0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0];
+      if(K[s]||Math.random()<.04+this.tension*.1) this.kick(t);
+      if(N[s]) this.snare(t,.5); else if(Math.random()<.1+this.tension*.28) this.snare(t,.22);
+      if(s%2===0||Math.random()<.4+this.tension*.4) this.hat(t,s%4===2?.2:.1);
+      if(Math.random()<this.tension*.22) for(let i=1;i<4;i++) this.snare(t+sd*i/4,.2+.04*i);
+    }else{
+      if(s===0) this.drone(t,sd*16);
+      if(s%8===4&&Math.random()<.5) this.hat(t,.05);
+    }
+    this.next+=sd; this.step++;
+  }
+};
+AU.cut=function(sec=.7){
+  if(!this.ctx||this.muted) return;
+  const g=this.master.gain,t=this.ctx.currentTime;
+  g.cancelScheduledValues(t); g.setValueAtTime(0,t); g.linearRampToValueAtTime(.55,t+sec);
+};
+AU.hit=function(){ if(!this.ctx) return; const t=this.ctx.currentTime; this.kick(t); this.nz(t,'lowpass',900,.5,.7); };
+AU.setMute=function(m){ this.muted=m; if(this.master) this.master.gain.value=m?0:.55; };
+AU.click=function(f){ if(!this.ctx||this.muted) return; const t=this.ctx.currentTime; if(f) this.nz(t,'bandpass',f,.045,.55); else this.nz(t,'highpass',2600,.035,.3); };
+AU.tap=function(){ if(!this.ctx||this.muted) return; const t=this.ctx.currentTime; this.nz(t,'bandpass',700,.08,.5); };
+AU.setMuffle=function(on){ this.muf=on; if(this.lp) this.lp.frequency.value=on?650:20000; };
+/* ---------- Opponents ---------- */
+const CH={
+  debtor:{id:'debtor',name:'欠債的男人',tag:'膽小',hint:'容易被威嚇，常常早早喊你說謊。',dice:4,sanity:55,callThr:.55,bluff:.06,resist:0,tier:0,
+    parts:['hand','ear','eye'],organ:{k:'hand',name:'顫抖的手'},ask:'gold',core:{tone:'lure',bad:'threat',name:'還清債務',clues:['他又摸了摸口袋裡那張皺掉的欠條。','「只要能還清……」他低聲說，沒有看你。']},atkP:.10,atkD:[5,9],atk:['你也有家人吧……你想過他們怎麼辦嗎？','殺人的人，晚上睡得著嗎？'],
+    look:{skin:'#b9a28f',hair:'#2a2220',style:'short',acc:'sweat',cloth:'#35302e'},
+    lines:{open:['……我先喊。'],raise:['再、再多一點應該沒問題。','至少……至少這麼多。'],call:['我不信！喊你說謊！','你在騙我對不對？'],lose:['啊……又少一顆。','我還有家人在等……'],win:['太好了……','我還能再撐一下。'],low:['別看我……','我撐不住了……'],die:'……對不起。',spare:'謝謝你。我自己走出去。'}},
+  kid:{id:'kid',name:'少年',tag:'莽撞',hint:'愛加註，也愛虛張聲勢。',dice:4,sanity:70,callThr:.3,bluff:.35,resist:.08,tier:0,
+    parts:['hand','ear','eye'],organ:{k:'tongue',name:'年輕的舌'},ask:'item',core:{tone:'empathy',bad:'lure',name:'不想一個人',clues:['他看了一眼空著的椅子，又很快移開。','「……反正也沒人在等我。」他小聲說。']},atkP:.22,atkD:[6,10],atk:['大叔，你手在抖喔。','你根本不敢殺我吧。'],
+    look:{skin:'#c7a98f',hair:'#4a1d22',style:'cap',acc:'none',cloth:'#2d2a38'},
+    lines:{open:['來啊，先讓你看看我的。'],raise:['這點數嚇到你了嗎？','加！我才不怕。'],call:['騙子！','我賭你在唬我！'],lose:['只是運氣不好。','……少來，還沒結束。'],win:['哈！','你看，我說了吧。'],low:['我、我才沒有在怕。','手別抖……別抖啊……'],die:'……騙人的吧。',spare:'……算你欠我一次。'}},
+  woman:{id:'woman',name:'笑著的女人',tag:'虛張',hint:'常常唬人，笑容不代表手牌。',dice:5,sanity:85,callThr:.27,bluff:.4,resist:.1,tier:1,
+    parts:['ear','hand','eye','tongue'],organ:{k:'eye',name:'看透的眼'},ask:'organ',core:{tone:'threat',bad:'empathy',name:'怕被看穿',clues:['她的笑僵了一下，又立刻掛回去。','她避開了你的視線，指尖敲著桌面。']},atkP:.45,atkD:[7,12],atk:['你看起來好累呢，要不要睡一下？','你剛剛眨了三次眼，有發現嗎？','一直盯著骰子，會看見不存在的東西喔。'],
+    look:{skin:'#d2b8a4',hair:'#1a1214',style:'long',acc:'smile',cloth:'#5a1a28'},
+    lines:{open:['先從溫柔的開始吧。'],raise:['你覺得我在說謊嗎？','呵呵，我只是在陳述事實。'],call:['親愛的，這次我不信。','露出破綻了呢。'],lose:['真可惜。','你比我想的還要有趣。'],win:['謝謝招待。','別哭，繼續吧。'],low:['笑不出來了……','為什麼你的眼神那麼冷……'],die:'……還是笑著結束吧。',spare:'……好吧。這次我讓你走。'}},
+  elder:{id:'elder',name:'沉默的老人',tag:'固執',hint:'很少唬人，不容易被說服。',dice:5,sanity:90,callThr:.42,bluff:.04,resist:.22,tier:1,
+    parts:['hand','tongue','ear','eye'],organ:{k:'ear',name:'沉默的耳'},ask:'item',core:{tone:'empathy',bad:'lure',name:'想被記得',clues:['他盯著桌面上的刮痕，像在數有多少人坐過這裡。','「……沒有人會記得這張桌子。」他自言自語。']},atkP:.2,atkD:[6,10],atk:['……我看過很多和你一樣的人。','……他們都沒有走出去。'],
+    look:{skin:'#b8a99a',hair:'#8d8689',style:'bald',acc:'glasses',cloth:'#2a2f2c'},
+    lines:{open:['……'],raise:['……三個。','……這樣。'],call:['不信。','你說謊。'],lose:['……嗯。','年輕人，手很穩。'],win:['……繼續。','……'],low:['我活了很久了……','不必勸我。'],die:'……很安靜。',spare:'……好。就到這裡。'}},
+  dealer:{id:'dealer',name:'荷官',tag:'無表情',hint:'規則之外沒有破綻，很難說服。',dice:6,sanity:100,callThr:.38,bluff:.15,resist:.25,tier:2,
+    parts:['hand','ear','eye','tongue','hand'],organ:null,ask:'gold',core:{tone:'lure',bad:'threat',name:'一筆交易',clues:['他的視線在你的籌碼上停了半秒。','「規則之外的條件……也是條件。」他說。']},atkP:.35,atkD:[8,13],atk:['你的名字在名單上。','請不要試圖記住我的臉。'],
+    look:{skin:'#c9c2b8',hair:'#0b0708',style:'slick',acc:'mask',cloth:'#0b0708'},
+    lines:{open:['歡迎光臨。請下注。'],raise:['請確認您的叫牌。','規則是公平的。'],call:['驗牌。','我認為您在說謊。'],lose:['規則是公平的。','……記錄在案。'],win:['這是機率。','請繼續。'],low:['面具……面具快掉了。','這不在規則裡。'],die:'營業……結束。',spare:'本桌……暫停營業。'}}
+};
+
+/* ---------- Pixel table scene (320x180, scaled up) ---------- */
+const cv=$('#cv'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
+const SC={t:0,ch:null,mood:'idle',sanity:100,glitch:0,reveal:0,revealTarget:0,oDice:[],pDice:[],oN:0,pN:0,peeked:[],rollT:0,hiFace:0,pg:0,pst:0,of:{},pHide:[]};
+const R=(x,y,w,h,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));};
+const PIPS={1:[[1,1]],2:[[0,0],[2,2]],3:[[0,0],[1,1],[2,2]],4:[[0,0],[2,0],[0,2],[2,2]],5:[[0,0],[2,0],[1,1],[0,2],[2,2]],6:[[0,0],[2,0],[0,1],[2,1],[0,2],[2,2]]};
+
+function die(x,y,s,v,hi){
+  if(!PIPS[v]) return;
+  R(x,y,s,s,hi?'#d1122b':'#ebe5dc'); R(x+1,y+1,s-2,s-2,hi?'#e8334a':'#f6f1e9');
+  const p=Math.max(2,Math.round(s/6)),col=hi?'#ffffff':'#0b0708';
+  for(const [a,b] of PIPS[v]) R(x+s*(.22+.28*a)-p/2+.5,y+s*(.22+.28*b)-p/2+.5,p,p,col);
+}
+function cup(x,y,s=1){
+  const w1=22*s,w2=30*s,h=22*s;
+  cx.fillStyle='#1c1215';cx.beginPath();cx.moveTo(x-w1/2,y);cx.lineTo(x+w1/2,y);cx.lineTo(x+w2/2,y+h);cx.lineTo(x-w2/2,y+h);cx.closePath();cx.fill();
+  R(x-w1/2+3,y+2,3,h-4,'#3b2328'); R(x-w2/2+1,y+h-6,w2-2,2,'#d1122b'); R(x-w1/2-2,y-2,w1+4,3,'#2a1b1f');
+}
+
+function drawBG(){
+  R(0,0,320,180,'#0b0708');
+  for(let y=0;y<104;y+=4) R(0,y,320,4,(y/4)%2?'#14090c':'#170b0e');
+  const fl=.85+Math.sin(SC.t*23)*.05-(Math.random()<.02?.3:0);
+  for(let i=0;i<2;i++){
+    cx.fillStyle=`rgba(209,18,43,${.07*fl})`;cx.beginPath();cx.moveTo(152,6);cx.lineTo(168,6);cx.lineTo(250-i*30,106);cx.lineTo(70+i*30,106);cx.closePath();cx.fill();
+  }
+  R(158,0,4,6,'#ebe5dc'); R(154,6,12,3,'#ffffff');
+}
+
+function drawOpp(){
+  const ch=SC.ch; if(!ch) return;
+  const L=ch.look,ins=1-SC.sanity/100,t=SC.t;
+  let mood=SC.mood; if(mood==='idle') mood=SC.sanity<35?'afraid':(L.acc==='smile'?'smug':'idle');
+  const dead=mood==='dead',dy=dead?20:0,bx=160+(dead?0:Math.sin(t*1.2)*1.5);
+  R(bx-46,82+dy*.4,92,40,L.cloth); R(bx-56,96+dy*.4,112,30,L.cloth);
+  R(bx-11,72+dy*.3,22,12,L.skin); R(bx-9,82+dy*.4,18,3,'#0b0708');
+  const hx=bx-22,hy=28+dy,H=L.hair;
+  R(hx+4,hy,36,2,L.skin); R(hx,hy+2,44,40,L.skin); R(hx+4,hy+42,36,4,L.skin);
+  if(L.style==='short'){R(hx-1,hy-3,46,9,H);R(hx-2,hy+4,4,12,H);R(hx+42,hy+4,4,12,H);}
+  else if(L.style==='cap'){R(hx-2,hy-5,48,12,H);R(hx-8,hy+5,60,4,H);}
+  else if(L.style==='long'){R(hx-2,hy-4,48,11,H);R(hx-7,hy+3,11,54,H);R(hx+40,hy+3,11,54,H);}
+  else if(L.style==='bald'){R(hx-1,hy+12,3,14,'#8d8689');R(hx+42,hy+12,3,14,'#8d8689');}
+  else{R(hx-1,hy-3,46,8,H);R(hx+8,hy+5,28,2,H);}
+  const ey=hy+18,ex1=hx+10,ex2=hx+28;
+  const lx=Math.sin(t*(2+ins*10))*ins*2.4,ly=Math.cos(t*(3+ins*8))*ins*1.2;
+  if(dead){
+    for(const ex of [ex1,ex2]){R(ex,ey,2,2,'#0b0708');R(ex+6,ey,2,2,'#0b0708');R(ex+2,ey+2,4,2,'#0b0708');R(ex,ey+4,2,2,'#0b0708');R(ex+6,ey+4,2,2,'#0b0708');}
+  }else if(mood==='relief'){
+    R(ex1,ey+3,8,2,'#0b0708');R(ex2,ey+3,8,2,'#0b0708');
+  }else{
+    const ps=ins>.6?2:3,e2y=ey+(ins>.4?Math.round(ins*3):0);
+    R(ex1,ey,8,6,'#ebe5dc');R(ex2,e2y,8,6,'#ebe5dc');
+    R(ex1+2+lx,ey+1+ly,ps,ps+1,'#0b0708');R(ex2+2+lx,e2y+1+ly,ps,ps+1,'#0b0708');
+    if(ins>.5){R(ex1+1,ey+4,1,1,'#d1122b');R(ex1+6,ey+1,1,1,'#d1122b');R(ex2+1,e2y+1,1,1,'#d1122b');R(ex2+6,e2y+4,1,1,'#d1122b');}
+    const bu=mood==='afraid'?-3:(mood==='hurt'?-1:0);
+    R(ex1-1,ey-4+bu,10,2,'#1a1214');R(ex2-1,ey-4+bu,10,2,'#1a1214');
+  }
+  if(SC.of&&SC.of.eye&&!dead){R(ex2-2,ey-3,12,12,'#0b0708');R(ex2+2,ey+2,2,2,'#d1122b');R(ex2-3,ey-4,14,1,'#3b2328');}
+  const my=hy+36,mx=hx+15,mc='#2a1214';
+  if(L.acc==='mask'){
+    R(hx,hy+26,44,20,'#ebe5dc');R(hx+6,hy+36,32,1,'#d1122b');
+    if(mood==='afraid'||mood==='hurt'||ins>.5) R(hx+10+Math.round(Math.sin(t*9)*4),hy+30,2,12,'#d1122b');
+  }else if(dead){R(mx,my,14,2,'#0b0708');}
+  else if(mood==='relief'){R(mx+2,my,10,2,'#5a3a3a');R(mx,my-2,2,2,'#5a3a3a');R(mx+12,my-2,2,2,'#5a3a3a');}
+  else if(mood==='smug'){R(mx,my,14,2,mc);R(mx-2,my-2,2,2,mc);R(mx+14,my-2,2,2,mc);}
+  else if(mood==='afraid'||mood==='hurt'){for(let i=0;i<7;i++) R(mx+i*2,my+((i+Math.floor(t*8))%2)*2,2,2,mc);}
+  else R(mx,my,14,2,mc);
+  if(L.acc==='glasses'&&!dead){
+    for(const ex of [ex1,ex2]){R(ex-2,ey-2,12,1,'#8d8689');R(ex-2,ey+7,12,1,'#8d8689');R(ex-2,ey-2,1,10,'#8d8689');R(ex+9,ey-2,1,10,'#8d8689');}
+    R(ex1+10,ey+2,8,1,'#8d8689');
+  }
+  if((L.acc==='sweat'||ins>.25)&&!dead){
+    R(hx+46,hy+8+((t*18)%30),2,3,'#9fd6e0'); R(hx-4,hy+14+((t*14+9)%28),2,3,'#9fd6e0');
+  }
+}
+
+function drawTable(){
+  cx.save();
+  cx.beginPath();cx.moveTo(46,106);cx.lineTo(274,106);cx.lineTo(320,180);cx.lineTo(0,180);cx.closePath();cx.clip();
+  R(0,100,320,80,'#2b0a10');
+  cx.fillStyle='rgba(0,0,0,.18)';for(let y=112;y<180;y+=6) cx.fillRect(0,y,320,1);
+  cx.restore();
+  R(46,104,228,3,'#4a1820');
+  const ease=1-Math.pow(1-SC.reveal,3),n=SC.oN,sp=18,x0=160-(n-1)*sp/2;
+  if(SC.reveal>.02) for(let i=0;i<n;i++) die(x0+i*sp-6,118,13,SC.oDice[i],SC.hiFace&&SC.oDice[i]===SC.hiFace&&SC.reveal>.6);
+  if(ease<.98){cx.globalAlpha=1-ease;cup(160,108-ease*34);cx.globalAlpha=1;}
+  SC.peeked.forEach((v,i)=>die(112-i*16,116,12,v,true));
+  drawClaim();
+}
+
+/* What the opponent CLAIMS (his last bid): a small, faint, dashed-outline die floating above his cup, so it reads as a claim and never as a real die. */
+function drawClaim(){
+  const c=SC.ghostClaim&&SC.ghostClaim.until>performance.now()?SC.ghostClaim:SC.claim;
+  if(!c||SC.reveal>.04||!PIPS[c.f]) return;
+  const g=c===SC.ghostClaim,age=(performance.now()-(SC.claimT||0))/1000,pop=reduceMotion?0:Math.max(0,1-age*4),s=12+pop*4;
+  const bob=reduceMotion?0:Math.round(Math.sin(SC.t*2.2)*1.5),x=147-pop*2,y=90-pop*3+bob;
+  cx.save();
+  cx.globalAlpha=g?.55:.42;
+  R(x,y,s,s,g?'#3a0d14':'#ebe5dc');R(x+1,y+1,s-2,s-2,g?'#7a1424':'#f6f1e9');
+  const p=Math.max(2,Math.round(s/6));
+  for(const [a,b] of PIPS[c.f]) R(x+s*(.22+.28*a)-p/2+.5,y+s*(.22+.28*b)-p/2+.5,p,p,g?'#ffb3bd':'#0b0708');
+  cx.globalAlpha=g?.8:.6;
+  cx.setLineDash([2,2]);cx.strokeStyle=g?'#d1122b':'#ebe5dc';cx.lineWidth=1;cx.strokeRect(x-1.5,y-1.5,s+3,s+3);cx.setLineDash([]);
+  cx.globalAlpha=g?.9:.75;
+  cx.fillStyle=g?'#ff8a98':'#ebe5dc';cx.font='bold 11px monospace';cx.textBaseline='middle';cx.fillText('×'+c.q,x+s+4,y+s/2+1);
+  cx.restore();
+}
+
+function dieNoise(x,y,s,v){
+  if(!PIPS[v]) return;
+  R(x,y,s,s,'#3a0d14');R(x+1,y+1,s-2,s-2,'#7a1424');
+  const p=Math.max(2,Math.round(s/6));
+  for(const [a,b] of PIPS[v]) R(x+s*(.22+.28*a)-p/2+.5,y+s*(.22+.28*b)-p/2+.5,p,p,'#ffb3bd');
+  for(let k=0;k<3;k++) R(x-1,y+rnd(0,s-1),s+2,1,k?'#d1122b':'#ff6b7d');
+}
+function drawMine(){
+  const n=SC.pN,sp=24,x0=160-(n-1)*sp/2-8;
+  for(let i=0;i<n;i++){
+    if(SC.pg>0&&Math.random()<SC.pg*.05) continue;
+    const jx=SC.pg>0?rnd(-1,1)*Math.round(SC.pg*3):0,x=x0+i*sp+jx,y=148+(SC.rollT>0?rnd(-2,2):0);
+    if(SC.rollT<=0&&SC.pHide&&SC.pHide.includes(i)){
+      R(x,y,17,17,'#2a1b1f');R(x+1,y+1,15,15,'#140a0c');
+      cx.fillStyle='#d1122b';cx.font='bold 13px monospace';cx.fillText('?',x+5,y+13);
+      continue;
+    }
+    let v=SC.rollT>0?rnd(1,6):SC.pDice[i]; if(!v) continue;
+    if(SC.rollT<=0&&SC.pst>=1&&SC.revealTarget<.5){
+      const sl=Math.floor(SC.t*6)+i*7,h=Math.abs(Math.sin(sl*12.9898)*43758.5453)%1;
+      if(h<[0,.14,.26,.4][SC.pst]){
+        let w=1+Math.floor((h*1e4)%6);if(w===v) w=w%6+1;
+        dieNoise(x,y,17,w);continue;
+      }
+    }
+    die(x,y,17,v,SC.hiFace&&v===SC.hiFace&&SC.reveal>.6);
+  }
+}
+
+function glitchPass(){
+  const g=Math.max(SC.glitch,SC.ch?(1-SC.sanity/100)*.5:0,SC.pg*.85);
+  if(g<.03||reduceMotion) return;
+  const n=Math.floor(g*5)+(Math.random()<g?1:0);
+  for(let i=0;i<n;i++){const y=rnd(0,170),h=rnd(2,14),dx=rnd(-14,14)*(.4+g);cx.drawImage(cv,0,y,320,h,dx,y,320,h);}
+}
+
+let lastT=performance.now();
+function frame(now){
+  const dt=Math.min(.05,(now-lastT)/1000);lastT=now;
+  if(!$('#scBattle').hidden&&!SC.freeze){
+    SC.t+=dt;
+    SC.reveal+=(SC.revealTarget-SC.reveal)*Math.min(1,dt*7);
+    if(Math.abs(SC.revealTarget-SC.reveal)<.003) SC.reveal=SC.revealTarget;
+    if(SC.rollT>0) SC.rollT-=dt;
+    SC.glitch=Math.max(0,SC.glitch-dt*.8);
+    drawBG();drawOpp();drawTable();drawMine();
+    if(SC.mood==='dead'){cx.fillStyle='rgba(209,18,43,.28)';cx.fillRect(0,0,320,180);}
+    glitchPass();
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+/* ---------- Liar's dice: helpers ---------- */
+const comb=(n,k)=>{let r=1;for(let i=1;i<=k;i++) r=r*(n-k+i)/i;return r;};
+const bino=(n,k,p)=>{if(k<=0) return 1;if(k>n) return 0;let s=0;for(let i=k;i<=n;i++) s+=comb(n,i)*Math.pow(p,i)*Math.pow(1-p,n-i);return s;};
+const roll=n=>Array.from({length:n},()=>rnd(1,6)).sort();
+const cnt=(a,f)=>a.filter(x=>x===f).length;
+
+let B={};
+const ui={q:1,f:1,card:0};
+const total=()=>B.pHp+B.oHp;
+function legal(q,f){
+  if(q<1||q>total()||f<1||f>6) return false;
+  if(!B.bid) return true;
+  return q>B.bid.q||(q===B.bid.q&&f>B.bid.f);
+}
+const visDice=()=>B.pDice.filter((v,i)=>!(B.hide&&B.hide.includes(i)));
+
+let sayT;
+function say(t){const b=$('#bubble');b.textContent=lostK('ear')?garble(t,.35):t;b.classList.add('on');clearTimeout(sayT);sayT=setTimeout(()=>b.classList.remove('on'),3800);}
+let noteT;
+function note(t,g){const n=$('#note');n.textContent=t;n.classList.toggle('ghost',!!g);n.classList.add('on');clearTimeout(noteT);noteT=setTimeout(()=>n.classList.remove('on'),3600);}
+function log(t,c='sys'){const d=document.createElement('div');d.className=c;d.textContent=t;$('#log').appendChild(d);const P=$('#logPanel');P.scrollTop=P.scrollHeight;if(c==='sys'||c==='leak'||c==='warn'||c==='ghost') note(t,c==='ghost');}
+function vpFx(c,ms=600){if(reduceMotion&&c!=='hit') return;const v=$('#vp');v.classList.add(c);setTimeout(()=>v.classList.remove(c),ms);}
+function updateTension(){AU.tension=clamp((1-(Math.min(B.pHp,B.oHp)-1)/4)*.75+(1-B.sanity/100)*.3+(1-S.san/100)*.15,0,1);}
+
+function setDefaultBid(){
+  if(!B.bid){
+    const mine=visDice();
+    const best=[1,2,3,4,5,6].sort((a,b)=>cnt(mine,b)-cnt(mine,a))[0];
+    ui.f=best;ui.q=Math.max(1,Math.min(total(),cnt(mine,best)+1));
+  }else{
+    let q=B.bid.q,f=B.bid.f+1;if(f>6){q++;f=1;}
+    ui.q=Math.min(q,total());ui.f=f;
+  }
+}
+
+/* ---------- Persuasion: tones, hidden core, evidence, deal ---------- */
+const adj=(san,tru)=>{B.sanity=clamp(B.sanity+san,0,100);B.trust=clamp(B.trust+tru,0,100);};
+const TONE={empathy:'同情',threat:'威脅',lure:'利誘'};
+const LURE_COST=10;
+const earBlock=()=>bossNow()&&lostK('ear');
+const minTrust=()=>Math.round(40+B.ch.resist*70);
+const dealMult=()=>clamp(1.5-B.trust/100*.8-(100-B.sanity)/100*.45,.35,1.5);
+const r5=v=>Math.max(5,Math.round(v/5)*5);
+const evTotal=()=>B.ev.bluff+B.ev.slip+B.ev.streak;
+const evAdd=(k,t)=>{if(B.ev[k]<2){B.ev[k]++;log(t,'leak');}};
+function giveClue(){
+  const cl=B.ch.core.clues;
+  if(B.know.core>=2||B.know.clue>=cl.length) return;
+  log(cl[B.know.clue++],'leak');
+  if(B.know.clue>=cl.length) B.know.core=Math.max(B.know.core,1);
+}
+function coreLine(){
+  const c=B.ch.core,k=B.know;
+  let s=k.core>=2?`心結：${c.name}（吃「${TONE[c.tone]}」）`:`心結：？${k.clue?`（線索 ${k.clue}/${c.clues.length}）`:''}`;
+  if(k.bad.length) s+=`　反感：${k.bad.map(t=>TONE[t]).join('、')}`;
+  return s;
+}
+function toneRun(tone){
+  const ch=B.ch,core=ch.core,tg=lostK('tongue')?1.5:1;
+  if(tone==='lure') S.gold-=LURE_COST;
+  if(tone===core.bad){
+    adj(0,-10);B.revenge=true;B.sour=(B.sour||0)+1;
+    if(!B.know.bad.includes(tone)) B.know.bad.push(tone);
+    return `他的臉沉了下來。這不是他想聽的。（信任 −10，他會反擊）`;
+  }
+  const hit=tone===core.tone,m=hit?1.8:1;
+  if(hit) B.know.core=2;
+  const tail=hit?`（命中心結：${core.name}）`:'';
+  if(tone==='empathy'){adj(-3,Math.round(12*m));return (hit?'他的肩膀整個鬆了下來。':'他的肩膀鬆了一點。')+tail;}
+  if(tone==='threat'){
+    adj(Math.round(-14*m*tg),hit?16:0);
+    if(Math.random()<(hit?.6:.35)){B.rattled=1;return '他的呼吸亂了，下一步可能不照常理走。'+tail;}
+    return (hit?'他整個人僵住了。':'他吞了口水。')+tail;
+  }
+  adj(Math.round(-6*m),Math.round(11*m));
+  return (hit?'他盯著你的手，久久沒有移開視線。':'他的視線動搖了一下。')+tail;
+}
+const CARDS=[
+  {id:'empathy',name:'同情',tone:'empathy',cost:1,desc:'信任 +12，理智 −3。',blk:earBlock,why:'你聽不見他，說不出口。',run:()=>toneRun('empathy')},
+  {id:'threat',name:'威脅',tone:'threat',cost:1,desc:'理智 −14，有機會讓他慌亂一次。正中心結時他會被嚇到服從（信任 +16）。',run:()=>toneRun('threat')},
+  {id:'lure',name:'利誘',tone:'lure',cost:1,desc:`信任 +11，理智 −6。花 ${LURE_COST} 金。`,need:()=>S.gold>=LURE_COST,nd:`金不夠（要 ${LURE_COST}）。`,run:()=>toneRun('lure')},
+  {id:'probe',name:'試探',cost:1,desc:'確認他的心結；已確認就看出他反感什麼。',blk:()=>lostK('eye'),why:'你看不清他。',
+    need:()=>B.know.core<2||B.know.bad.length<1,nd:'你已經看透他了。',
+    run(){
+      const c=B.ch.core;
+      if(B.know.core<2){B.know.core=2;return `你一邊說話一邊觀察。他的心結是「${c.name}」，吃「${TONE[c.tone]}」這一套。`;}
+      if(!B.know.bad.includes(c.bad)) B.know.bad.push(c.bad);
+      return `他最討厭被人用「${TONE[c.bad]}」對待。`;
+    }},
+  {id:'proof',name:'證據',cost:1,desc:'用賭局中抓到的破綻逼他：識破虛張、失言、連勝。',need:()=>evTotal()>0,nd:'手上沒有證據。',
+    run(){
+      const tg=lostK('tongue')?1.5:1;
+      if(B.ev.bluff>0){B.ev.bluff--;adj(Math.round(-20*tg),0);return '「你剛才在騙我。」他沒有反駁。';}
+      if(B.ev.slip>0){B.ev.slip--;adj(Math.round(-12*tg),0);B.rattled=1;return '「你剛才說漏嘴了，我都聽到了。」他的手停住。';}
+      B.ev.streak--;adj(Math.round(-10*tg),10);return '「運氣不會一直站在你這邊。」他低頭看自己的手。';
+    }},
+  {id:'deal',name:'談判',cost:2,desc:'讓他開價。接受就雙方離桌；可還價一次。',
+    need:()=>lostK('eye')||B.trust>=minTrust(),nd:'他還不願意談。',open:true}
+];
+const evText=()=>{const e=B.ev,a=[];if(e.bluff)a.push(`識破虛張 ×${e.bluff}`);if(e.slip)a.push(`失言 ×${e.slip}`);if(e.streak)a.push(`連勝 ×${e.streak}`);return a.length?a.join('、'):'無';};
+
+function dealOffer(counter){
+  const ch=B.ch,m=dealMult(),base=(45+ch.tier*35)*m;
+  let t=ch.ask;
+  if(counter){
+    return {type:'gold',gold:r5(base*.55),txt:`${r5(base*.55)} 金`};
+  }
+  if(t==='item'){
+    const k=['peek','reroll','gag'].sort((a,b)=>S.items[b]-S.items[a])[0];
+    return {type:'item',k,txt:`道具「${ITEMS[k].name}」×1`,ok:S.items[k]>0};
+  }
+  if(t==='organ'){
+    const nk=nextLoseKey();
+    if(nk&&nk!=='heart') return {type:'organ',k:nk,txt:`抵押你的「${ON[nk]}」（之後花 60 金贖回）`,ok:true};
+    t='gold';
+  }
+  const g=r5(base);
+  return {type:'gold',gold:g,txt:`${g} 金`};
+}
+const dealOk=o=>o.type==='gold'?S.gold>=o.gold:o.type==='item'?S.items[o.k]>0:true;
+function counterChance(){return clamp(.3+B.trust/100*.4+(B.know.core>=2?.1:0)-B.ch.resist*.6,.1,.85);}
+function openDeal(){
+  B.busy=true;B.dealCtr=false;B.offer=dealOffer(false);renderDeal();render();
+  say('……說說你的條件吧。');
+}
+function renderDeal(msg){
+  const el=$('#deal'),o=B.offer,can=dealOk(o);
+  el.hidden=false;
+  el.innerHTML=`<div class="dl"><h3>${B.ch.name}開價</h3><p class="of">${o.txt}</p>${msg?`<p class="nb">${msg}</p>`:''}<p class="mut sm">${can?'接受後，你們雙方都活著離開。':'你付不起這個價。'}${B.dealCtr?'　（已經還過價了）':`　還價成功率約 ${lostK('eye')?'？':Math.round(counterChance()*100)+'%'}，失敗信任 −15。`}</p>
+  <div class="dlb"><button type="button" id="dlYes" class="danger" ${can?'':'disabled'}>接受</button><button type="button" id="dlCtr" ${B.dealCtr?'disabled':''}>還價</button><button type="button" id="dlNo">離開談判</button></div></div>`;
+  $('#dlYes').onclick=dealAccept;$('#dlCtr').onclick=dealCounter;$('#dlNo').onclick=dealLeave;
+}
+function closeDeal(){$('#deal').hidden=true;}
+function dealLeave(){
+  if(B.over) return;
+  closeDeal();
+  if(!B.dealCtr) B.energy+=2;
+  B.busy=false;render();
+}
+function dealCounter(){
+  if(B.dealCtr||B.over) return;
+  B.dealCtr=true;
+  if(Math.random()<counterChance()){
+    B.offer=dealOffer(true);say('……好吧。就這個數。');
+    renderDeal('還價成功。');
+  }else{
+    adj(0,-15);SC.sanity=B.sanity;say('你在跟我討價還價？');
+    renderDeal('還價失敗，信任 −15。');
+    render();
+  }
+}
+function dealAccept(){
+  const o=B.offer;
+  if(B.over||!dealOk(o)) return;
+  let how;
+  if(o.type==='gold'){S.gold-=o.gold;how=`付了 ${o.gold} 金`;}
+  else if(o.type==='item'){S.items[o.k]--;how=`交出了「${ITEMS[o.k].name}」`;}
+  else{S.body.slots[o.k]={st:'lost',pledged:true};how=`抵押了「${ON[o.k]}」`;renderHud();}
+  S.spared.push({id:B.ch.id,name:B.ch.name,how,pledged:o.type==='organ',kept:true});
+  log(`你${how}。他收下了。`,'me');
+  closeDeal();B.spare=true;spareEnd();
+}
+
+async function useCard(id){
+  if(B.busy||B.turn!=='p'||B.over) return;
+  const c=CARDS.find(x=>x.id===id);
+  if(!c||B.energy<c.cost||(c.need&&!c.need())||(c.blk&&c.blk())) return;
+  B.energy-=c.cost;
+  if(c.open){log('你開口談條件。','me');render();return openDeal();}
+  B.busy=true;log(`你使用話術「${c.name}」。`,'me');
+  let msg;
+  if(st('tongue')==='pro'&&Math.random()<.25){msg='義舌卡了一下，話沒能說出口。';if(c.tone==='lure') S.gold+=LURE_COST;}
+  else msg=c.run();
+  if(st('tongue')==='tx') dSan(-3);
+  SC.sanity=B.sanity;SC.glitch=Math.max(SC.glitch,.35);updateTension();
+  renderHud();render();await sleep(600);log(msg,'sys');
+  if(B.sanity<35) say(pick(B.ch.lines.low));
+  B.busy=false;render();
+}
+function useItem(k){
+  if(B.busy||B.turn!=='p'||B.over||!S.items[k]||B.itemUsed>=itemCap()) return;
+  if(k==='peek'){
+    const left=B.oDice.map((v,i)=>i).filter(i=>!B.peeks.includes(i));
+    if(!left.length) return;
+    const i=pick(left);B.peeks.push(i);SC.peeked=B.peeks.map(j=>B.oDice[j]);
+    log(`偷看：他有一顆「${B.oDice[i]}」。`,'me');
+  }else if(k==='reroll'){
+    B.pDice=roll(B.pHp);SC.pDice=B.pDice;SC.rollT=.6;log('你重骰了所有骰子。','me');
+  }else if(k==='gag'){
+    B.gag=true;log('封口：他下一次不能喊「你說謊」。','me');
+  }
+  S.items[k]--;B.itemUsed++;
+  if(st('hand')==='pro') dSan(-4);
+  if(k==='reroll'&&!B.bid) setDefaultBid();
+  render();
+}
+
+/* ---------- Opponent AI ---------- */
+function oppDecide(){
+  const ch=B.ch,own=B.oDice,m=B.pHp,tot=total(),ins=(100-B.sanity)/100;
+  /* Low sanity: he misreads one face of his own dice by one. */
+  const mf=rnd(1,6),mo=Math.random()<ins*.6?(Math.random()<.5?-1:1):0;
+  const cn=f=>Math.max(0,cnt(own,f)+(f===mf?mo:0));
+  const P=(q,f)=>bino(m,q-cn(f),1/6);
+  const legals=[];
+  for(let q=1;q<=tot;q++) for(let f=1;f<=6;f++) if(legal(q,f)) legals.push([q,f]);
+  const canRaise=legals.length>0;
+  if(B.bid){
+    const pt=P(B.bid.q,B.bid.f)+(Math.random()-.5)*ins*.9+(B.of.eye?(Math.random()-.5)*.7:0);
+    /* Trust buys benefit of the doubt; a sour mood (wrong tone used on him) makes him quicker to call. */
+    let thr=ch.callThr*(1-B.trust/100*.55)+Math.min(.24,(B.sour||0)*.08);
+    if(mo&&B.bid.by==='p'&&mf===B.bid.f&&!B.misLogged){B.misLogged=1;log('他盯著自己的骰子，眼神有點飄。','leak');}
+    if(B.rattled>0){B.rattled--;thr=Math.random();}
+    B.lastThr=thr;
+    const gagged=B.gag&&canRaise;
+    if(!gagged&&(pt<thr||!canRaise)) return {call:true};
+    if(gagged) B.gag=false;
+  }
+  const base=B.bid?B.bid.q*6+B.bid.f:0;
+  let pool=legals.filter(([q,f])=>q*6+f-base<=14);
+  if(!pool.length) pool=legals;
+  const bluff=Math.random()<ch.bluff*(1+ins);
+  let best=pool[0],bs=-9;
+  for(const [q,f] of pool){
+    const dist=q*6+f-base;
+    const s=bluff?Math.random()+(dist>=6?.5:0):P(q,f)-.012*dist+(Math.random()-.5)*(.1+ins*.5+(B.of.hand?.45:0));
+    if(s>bs){bs=s;best=[q,f];}
+  }
+  return {q:best[0],f:best[1]};
+}
+
+async function oppTurn(){
+  B.busy=true;B.turn='o';render();
+  await sleep(rnd(900,1500));
+  if(B.over) return;
+  const ch=B.ch;
+  const force=B.revenge;B.revenge=false;
+  if(!B.of.tongue&&!B.gag&&(force||Math.random()<ch.atkP*(1+(100-S.san)/250))){
+    let dmg=rnd(ch.atkD[0],ch.atkD[1])+(force?3:0);
+    if(lostK('ear')) dmg=Math.max(1,Math.round(dmg/2));
+    say(pick(ch.atk));
+    const fl=$('#flash');fl.textContent='「…」';fl.classList.add('on');SC.glitch=.7;
+    await sleep(650);fl.classList.remove('on');
+    if(B.over) return;
+    log(`${ch.name}的話刺進你心裡。理智 −${dmg}。${lostK('ear')?'（你聽不太清楚）':''}`,'sys');
+    dSan(-dmg);SC.glitch=.6;
+    await sleep(1000);
+    if(B.over) return;
+  }
+  const d=oppDecide();
+  if(d.call){
+    say(pick(ch.lines.call));
+    await sleep(700);
+    return reveal('o');
+  }
+  B.bid={q:d.q,f:d.f,by:'o'};
+  log(`${ch.name} 叫牌：至少 ${d.q} 顆「${d.f}」`,'opp');
+  say(pick(ch.lines.raise));
+  const th=(st('ear')==='tx'||B.of.ear)?65:45;
+  if(B.sanity<th&&Math.random()<(th-B.sanity)/80+.1){
+    let c=cnt(B.oDice,d.f);
+    if(st('ear')==='pro'&&Math.random()<.3) c=rnd(0,B.oHp);
+    await sleep(900);
+    if(lostK('ear')){
+      log('他像是漏了什麼口風，但你什麼也沒聽清。','warn');
+    }else{
+      say(`……我手上其實有 ${c} 顆「${d.f}」……`);
+      log(`（失言）他手上有 ${c} 顆「${d.f}」。`,'leak');
+      evAdd('slip','（證據）你聽到他說漏嘴了。');
+    }
+  }
+  B.turn='p';B.busy=false;setDefaultBid();render();
+}
+
+/* ---------- Flow ---------- */
+async function startBattle(node){
+  const ch=node.opp,boss=node.type==='boss';
+  B={ch,boss,of:{hand:0,ear:0,eye:0,tongue:0},oq:[...ch.parts],oLost:0,oHp:ch.dice,pHp:aliveCount(),sanity:ch.sanity,trust:0,energy:0,itemUsed:0,round:0,bid:null,turn:null,busy:true,gag:false,rattled:0,peeks:[],hide:[],over:false,spare:false,pDice:[],oDice:[],know:{core:0,clue:0,bad:[]},ev:{bluff:0,slip:0,streak:0},oWin:0,revenge:false,offer:null,dealCtr:false};
+  Object.assign(SC,{ch,of:B.of,mood:'idle',sanity:B.sanity,reveal:0,revealTarget:0,glitch:0,peeked:[],hiFace:0,oN:ch.dice,pN:B.pHp,oDice:[],pDice:[],pHide:[]});
+  W.talk=null;$('#deal').hidden=true;
+  $('#log').innerHTML='';$('#logPanel').hidden=true;$('#btnLog').setAttribute('aria-expanded','false');
+  updateTension();show('scBattle');render();
+  log('拖曳外環選點數、內環選數量，再按「叫牌」。中央是「你說謊」。右邊轉盤是話術：他有個心結，找出吃哪一種語氣。','hint');
+  if(boss) ORGS.slice(0,4).filter(lostK).forEach(k=>log(`荷官戰：${ORG_INFO[k].boss}。`,'warn'));
+  log(`${ch.name}坐在桌子對面。`,'sys');
+  await sleep(900);say(pick(ch.lines.open));await sleep(1100);
+  newRound('o');
+}
+
+function newRound(starter){
+  B.round++;B.misLogged=0;B.pDice=roll(B.pHp);B.oDice=roll(B.oHp);B.bid=null;B.energy=Math.min(talkMax(),B.energy+(talkMax()>0?1:0));B.itemUsed=0;B.peeks=[];B.gag=false;
+  B.hide=[];
+  if(B.boss&&lostK('eye')){
+    B.hide=[...Array(B.pHp).keys()].sort(()=>Math.random()-.5).slice(0,Math.ceil(B.pHp/2));
+  }
+  Object.assign(SC,{pDice:B.pDice,oDice:B.oDice,pN:B.pHp,oN:B.oHp,rollT:.7,revealTarget:0,hiFace:0,peeked:[],mood:'idle',pHide:B.hide});
+  log(`—— 第 ${B.round} 回合 ——`,'sys');
+  if(lostK('eye')){
+    const cs=[1,2,3,4,5,6].map(f=>[f,cnt(B.oDice,f)]).sort((a,b)=>b[1]-a[1]||Math.random()-.5);
+    log(`心眼：他手上最多的是「${cs[0][0]}」。`,'sys');
+  }
+  if(st('hand')==='tx') dSan(-2);
+  if(st('ear')==='tx') dSan(-2);
+  if(st('eye')==='tx'){
+    dSan(-3);
+    const i=rnd(0,B.oDice.length-1);B.peeks.push(i);SC.peeked=B.peeks.map(j=>B.oDice[j]);
+    log(`看透的眼：他有一顆「${B.oDice[i]}」。`,'me');
+  }
+  updateTension();
+  B.turn=starter;B.busy=false;
+  if(starter==='o') oppTurn(); else {setDefaultBid();render();}
+}
+
+async function reveal(challenger){
+  B.busy=true;render();
+  const {q,f,by}=B.bid;
+  log(`${challenger==='p'?'你':B.ch.name}：「你說謊。」`,challenger==='p'?'me':'opp');
+  const fl=$('#flash');fl.textContent='你說謊';fl.classList.add('on');
+  AU.cut(.9);SC.glitch=.9;vpFx('invert',140);
+  await sleep(700);fl.classList.remove('on');
+  AU.hit();SC.revealTarget=1;SC.hiFace=f;vpFx('shake');
+  const actual=cnt(B.pDice,f)+cnt(B.oDice,f);
+  await sleep(1100);
+  log(`桌上共有 ${actual} 顆「${f}」，叫牌是 ${q} 顆。`,'sys');
+  const loser=actual>=q?challenger:by;
+  if(loser==='p'){
+    const nk=nextLoseKey();let k,seized=false;
+    if(nk==='heart') k=loseNext();
+    else if(await betWheel(nk)==='win'){k=seizePart(nk);seized=true;await partAnim(k,'seize');}
+    else{await partAnim(nk,'cut');k=loseNext();}
+    B.pHp=aliveCount();
+    log(k==='heart'?'你的心臟停了。':seized?`「${ON[k]}」被沒收了，本局結束後會還回來。`:`你失去了「${ON[k]}」。`,'me');
+    if(k!=='heart'){
+      log(ORG_INFO[k].lost+(B.boss?`荷官戰：${ORG_INFO[k].boss}。`:''),'warn');
+    }
+    B.oWin++;if(B.oWin>=2) evAdd('streak','（證據）他連贏了兩回合，開始得意。');
+    say(pick(B.ch.lines.win));SC.mood='smug';vpFx('hit',500);
+    renderHud();dSan(-10);
+    if(by==='p'){log('你的虛張被識破了。','warn');dSan(-6);}
+  }else{
+    B.oHp--;B.sanity=clamp(B.sanity-8,0,100);SC.sanity=B.sanity;
+    log(`${B.ch.name} 失去一顆骰子。`,'opp');say(pick(B.ch.lines.lose));SC.mood='hurt';
+    oppLosePart();B.oWin=0;
+    if(talkMax()>0){const g=1+((by==='o'&&challenger==='p')?1:0),b0=B.energy;B.energy=Math.min(talkMax(),B.energy+g);if(B.energy>b0) log(`你贏下這回合，話術點 +${B.energy-b0}${g>1?'（抓到他虛張）':''}。`,'sys');}
+    if(B.trust>0){adj(0,-6);log('他輸了一顆骰子，對你的信任下降。（信任 −6）','sys');}
+    if(by==='o'&&challenger==='p') evAdd('bluff','（證據）他剛才在虛張聲勢，被你抓到了。');
+    giveClue();
+    if(challenger==='p'&&lostK('hand')){B.sanity=clamp(B.sanity-12,0,100);SC.sanity=B.sanity;log('斷腕：你的質疑像刀一樣，他的理智額外 −12。','sys');}
+    dSan(3);
+  }
+  updateTension();render();
+  await sleep(1800);
+  if(B.over) return;
+  if(B.pHp<=0) return defeat();
+  if(B.oHp<=0) return killEnd();
+  newRound(loser);
+}
+
+function playerBid(){
+  if(B.busy||B.turn!=='p'||B.over||!legal(ui.q,ui.f)) return;
+  B.bid={q:ui.q,f:ui.f,by:'p'};
+  log(`你叫牌：至少 ${ui.q} 顆「${ui.f}」`,'me');
+  B.busy=true;B.turn='o';render();setTimeout(oppTurn,500);
+}
+function playerCall(){
+  if(B.busy||B.turn!=='p'||B.over||!B.bid||B.bid.by!=='o') return;
+  reveal('p');
+}
+
+const OPP_EFF={hand:'他的手開始發抖，叫牌變得不穩。',eye:'他的視線模糊了，判斷變差。',ear:'他聽不見自己的聲音，更容易說漏嘴。',tongue:'他說不出話了，不能再對你說話。'};
+function oppLosePart(){
+  B.oLost++;
+  if(B.oHp<=0) return;
+  const p=B.oq.shift();
+  if(p){B.of[p]++;log(`${B.ch.name}失去了「${ON[p]}」。${OPP_EFF[p]}`,'warn');}
+}
+async function killEnd(){
+  B.over=true;AU.cut(1.2);SC.mood='dead';SC.glitch=1;vpFx('shake',900);
+  say(B.ch.lines.die);log(`${B.ch.name}死了。`,'opp');
+  const dmg=8+B.ch.tier*2+2*(S.sin+1);
+  dSan(-dmg);log(`你看著他的死狀，理智 −${dmg}。`,'sys');
+  render();
+  await sleep(2400);finish('kill');
+}
+async function spareEnd(){
+  B.over=true;B.busy=true;SC.mood='relief';
+  say(B.ch.lines.spare);log('你們都活著離開了這張桌子。','sys');
+  dSan(30);log('你鬆了一口氣，理智 +30。','sys');
+  render();
+  await sleep(2400);finish('spare');
+}
+async function defeat(){
+  if(B.dead) return;B.dead=true;
+  B.over=true;AU.cut(1.5);log('你的骰子沒有了。','me');render();
+  await sleep(1800);showEnd('dead');
+}
+/* ---------- Wheels: drag to rotate, release to snap ---------- */
+const NS='http://www.w3.org/2000/svg';
+const sv=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a) e.setAttribute(k,a[k]);if(p) p.appendChild(e);return e;};
+const polar=(r,a)=>{const t=a*Math.PI/180;return [200+r*Math.sin(t),200-r*Math.cos(t)];};
+const mod=(a,n)=>((a%n)+n)%n;
+function sectorPath(r0,r1,a0,a1){
+  const [x1,y1]=polar(r1,a0),[x2,y2]=polar(r1,a1),[x3,y3]=polar(r0,a1),[x4,y4]=polar(r0,a0),lg=(a1-a0)>180?1:0;
+  return `M${x1} ${y1}A${r1} ${r1} 0 ${lg} 1 ${x2} ${y2}L${x3} ${y3}A${r0} ${r0} 0 ${lg} 0 ${x4} ${y4}Z`;
+}
+const isMine=()=>B.turn==='p'&&!B.busy&&!B.over;
+
+function makeRing(svg,o){
+  const g=sv('g',{class:'ring '+(o.cls||'')},svg),step=360/o.n,slots=[];
+  for(let i=0;i<o.n;i++){
+    const c=i*step,s=sv('g',{class:'slot'},g);
+    sv('path',{d:sectorPath(o.r0,o.r1,c-step/2,c+step/2),class:'sp '+(i%2?'b':'a')},s);
+    const [tx,ty]=polar(o.labR,c);
+    if(o.icon) pipIcon(s,tx,ty,o.icon(i),o.is||44,c);
+    else sv('text',{x:tx,y:ty,class:'sl','font-size':o.fs,transform:`rotate(${c} ${tx} ${ty})`},s).textContent=o.label(i);
+    if(o.sub){
+      const [sx,sy]=polar(o.subR,c);
+      sv('text',{x:sx,y:sy,class:'ss','font-size':o.subFs,transform:`rotate(${c} ${sx} ${sy})`},s).textContent=o.sub(i);
+    }
+    slots.push(s);
+  }
+  return {g,n:o.n,step,slots,rot:0,k:0,idx:0,dragging:false,onChange:o.onChange,r0:o.r0,r1:o.r1,snd:o.snd,tag:o.tag};
+}
+function ringSet(r,i,anim=true){
+  i=mod(i,r.n);
+  let d=mod(i-r.k,r.n);if(d>r.n/2) d-=r.n;
+  r.k+=d;r.rot=-r.k*r.step;r.idx=i;
+  r.g.style.transition=anim?'':'none';
+  r.g.style.transform=`rotate(${r.rot}deg)`;
+}
+/* A drawn die face (pips) for the outer bid ring, so the face ring reads as dice and the quantity ring reads as numbers. */
+function pipIcon(parent,x,y,v,s,rot){
+  const g=sv('g',{transform:`rotate(${rot} ${x} ${y})`,class:'pi'},parent);
+  sv('rect',{x:x-s/2,y:y-s/2,width:s,height:s,rx:s*.16,class:'pf'},g);
+  const p=s*.3,r=s*.085;
+  for(const [a,b] of PIPS[v]) sv('circle',{cx:x-p+a*p,cy:y-p+b*p,r,class:'pp2'},g);
+}
+function addOverlay(svg,r){
+  const w=sv('path',{d:sectorPath(r.r0,r.r1,-r.step/2,r.step/2),class:'win'},svg);return w;
+}
+function addCenter(svg,id,rad,label,fs,label2){
+  const g=sv('g',{class:'cbtn',id,role:'button',tabindex:'0','aria-label':label},svg);
+  sv('circle',{cx:200,cy:200,r:rad,class:'cc'},g);
+  sv('text',{x:200,y:label2?188:200,class:'ct','font-size':fs},g).textContent=label;
+  if(label2) sv('text',{x:200,y:224,class:'ct',id:id+'Sub','font-size':20},g).textContent=label2;
+  return g;
+}
+
+/* Drag handling shared by both wheels. pick(radius) returns the ring under the pointer, in 400-unit space. */
+function bindWheel(svg,pick){
+  let cur=null,last=0;
+  const geom=e=>{
+    const b=svg.getBoundingClientRect(),dx=e.clientX-(b.left+b.width/2),dy=e.clientY-(b.top+b.height/2);
+    return {ang:Math.atan2(dx,-dy)*180/Math.PI,rad:Math.hypot(dx,dy)/(b.width/2)*200};
+  };
+  svg.addEventListener('pointerdown',e=>{
+    if(svg.classList.contains('off')||e.target.closest('.cbtn')) return;
+    const g=geom(e),r=pick(g.rad);if(!r) return;
+    cur=r;last=g.ang;r.dragging=true;r.g.style.transition='none';svg.classList.add('drag');svg.dataset.act=r.tag||'';
+    try{svg.setPointerCapture(e.pointerId);}catch(_){}
+    e.preventDefault();
+  });
+  svg.addEventListener('pointermove',e=>{
+    if(!cur) return;
+    const g=geom(e);let d=g.ang-last;if(d>180) d-=360;if(d<-180) d+=360;last=g.ang;
+    cur.rot+=d;cur.g.style.transform=`rotate(${cur.rot}deg)`;
+    const k=Math.round(-cur.rot/cur.step);
+    if(k!==cur.k){cur.k=k;cur.idx=mod(k,cur.n);AU.click(cur.snd);cur.onChange(cur.idx);}
+  });
+  const end=()=>{
+    if(!cur) return;
+    const r=cur;cur=null;r.dragging=false;svg.classList.remove('drag');delete svg.dataset.act;
+    const before=r.idx;let k=Math.round(-r.rot/r.step);
+    if(opSlip()) k+=Math.random()<.5?1:-1;
+    r.k=k;r.rot=-k*r.step;r.idx=mod(k,r.n);
+    r.g.style.transition='';r.g.style.transform=`rotate(${r.rot}deg)`;
+    if(r.idx!==before){AU.click(r.snd);r.onChange(r.idx);}
+  };
+  svg.addEventListener('pointerup',end);
+  svg.addEventListener('pointercancel',end);
+  svg.addEventListener('wheel',e=>{
+    if(svg.classList.contains('off')) return;
+    const r=pick(geom(e).rad);if(!r) return;
+    e.preventDefault();
+    ringSet(r,r.k+(e.deltaY>0?1:-1));AU.click(r.snd);r.onChange(r.idx);
+    svg.dataset.act=r.tag||'';clearTimeout(svg._at);svg._at=setTimeout(()=>{delete svg.dataset.act;},700);
+  },{passive:false});
+}
+
+/* ---------- Bid wheel: outer ring = face, inner ring = quantity, centre = call ---------- */
+const W={bid:null,talk:null};
+function buildBidWheel(){
+  const svg=$('#bidWheel'),n=Math.max(2,total());
+  svg.innerHTML='';
+  const outer=makeRing(svg,{n:6,r0:134,r1:186,labR:160,cls:'ro',tag:'o',snd:3600,icon:i=>i+1,is:40,onChange:i=>{ui.f=i+1;syncBid();}});
+  const inner=makeRing(svg,{n,r0:74,r1:130,labR:102,cls:'ri',tag:'i',snd:1100,fs:n>9?22:26,label:i=>'\u00d7'+(i+1),onChange:i=>{ui.q=i+1;syncBid();}});
+  addOverlay(svg,outer);addOverlay(svg,inner);
+  sv('polygon',{points:'186,0 214,0 200,18',class:'mk'},svg);
+  addCenter(svg,'callBtn',66,'你說謊',28);
+  W.bid={svg,outer,inner,n};
+  ringSet(outer,ui.f-1,false);ringSet(inner,ui.q-1,false);
+}
+const dieSvg=(v,s=20)=>`<svg class="dsv" viewBox="0 0 20 20" width="${s}" height="${s}" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" fill="#f6f1e9" stroke="#ebe5dc"/>${PIPS[v].map(([a,b])=>`<circle cx="${5+a*5}" cy="${5+b*5}" r="1.9" fill="#0b0708"/>`).join('')}</svg>`;
+function syncBid(){
+  if(!W.bid||!B.ch) return;
+  const {outer,inner}=W.bid,T=total();
+  outer.slots.forEach((s,i)=>{
+    const f=i+1;let any=false;for(let q=1;q<=T;q++) if(legal(q,f)){any=true;break;}
+    s.classList.toggle('dim',!any);s.classList.toggle('on',ui.f===f);
+  });
+  inner.slots.forEach((s,i)=>{const q=i+1;s.classList.toggle('dim',!legal(q,ui.f));s.classList.toggle('on',ui.q===q);});
+  const ok=legal(ui.q,ui.f);
+  const bb=$('#btnBid');
+  bb.innerHTML=`${dieSvg(ui.f,26)}<span class="bx">\u00d7</span><b>${ui.q}</b>`;
+  bb.setAttribute('aria-label',`叫牌，${ui.f} 點，${ui.q} 顆`+(ok?'':`。需高於 ${B.bid.f} 點 ${B.bid.q} 顆`));
+  $('#bidNeed').innerHTML=ok||!B.bid?'':`需高於 ${dieSvg(B.bid.f,14)}\u00d7${B.bid.q}`;
+  $('#btnBid').disabled=!(isMine()&&ok);
+}
+
+/* ---------- Talk wheel ---------- */
+const cardOk=i=>{const c=CARDS[i];return B.energy>=c.cost&&(!c.need||c.need())&&!(c.blk&&c.blk());};
+function buildTalkWheel(){
+  const svg=$('#talkWheel');svg.innerHTML='';
+  const ring=makeRing(svg,{n:CARDS.length,r0:92,r1:186,labR:150,fs:30,label:i=>lostK('tongue')?garble(CARDS[i].name,.35):CARDS[i].name,sub:i=>'●'.repeat(CARDS[i].cost),subR:116,subFs:18,onChange:i=>{ui.card=i;syncTalk();}});
+  addOverlay(svg,ring);
+  sv('polygon',{points:'186,0 214,0 200,18',class:'mk'},svg);
+  addCenter(svg,'talkBtn',84,'說出口',26);
+  W.talk={svg,ring};
+  ringSet(ring,ui.card,false);
+}
+function syncTalk(){
+  if(!W.talk||!B.ch) return;
+  const {ring}=W.talk;
+  ring.slots.forEach((s,i)=>{s.classList.toggle('dim',!cardOk(i));s.classList.toggle('on',ui.card===i);});
+  const c=CARDS[ui.card],ok=cardOk(ui.card);
+  let why='';
+  if(talkCap()===0) why='你沒有舌頭了。';
+  else if(c.blk&&c.blk()) why=c.why||'現在做不到。';
+  else if(B.energy<c.cost) why='話術點不足。';
+  else if(c.need&&!c.need()) why=c.nd||'現在不能用。';
+  let extra='';
+  if(c.tone&&B.know.core>=2){
+    if(c.tone===B.ch.core.tone) extra='他吃這一套。';
+    else if(B.know.bad.includes(c.tone)||c.tone===B.ch.core.bad&&B.know.bad.includes(c.tone)) extra='他反感這個。';
+  }
+  if(c.id==='proof') extra=`手上證據：${evText()}。`;
+  if(c.id==='deal') extra=lostK('eye')?'你看不清他，不知道時機。':`他願意談的信任：${minTrust()}（現在 ${Math.round(B.trust)}）。`;
+  if(lostK('tongue')&&(c.id==='threat'||c.id==='proof')) extra+=' 無聲的壓迫 ×1.5。';
+  $('#talkInfo').innerHTML=`<div class="ih"><b>${c.name}</b><span class="pp" title="話術點">${'●'.repeat(B.energy)}${'○'.repeat(Math.max(0,talkMax()-B.energy))}</span></div><div>${c.desc}${extra?' '+extra:''}${why?` <span class="nb">${why}</span>`:''}</div>`;
+  $('#talkBtn').classList.toggle('dis',!(isMine()&&ok));
+}
+
+/* ---------- Render & wiring ---------- */
+const IG={peek:'窺',reroll:'重',gag:'封'};
+function render(){
+  const ch=B.ch;if(!ch) return;
+  const my=isMine();
+  $('#oName').textContent=ch.name;$('#oTag').textContent=ch.tag;$('#oHint').textContent=ch.hint+'　'+coreLine()+(lostK('eye')?'':(B.sour?'　戒心 ↑':B.trust>=40?'　戒心 ↓':''));
+  const blind=lostK('eye'),noisy=v=>st('eye')==='pro'?clamp(v+rnd(-15,15),0,100):v;
+  $('#bSan').style.width=blind?'0%':noisy(B.sanity)+'%';$('#bTru').style.width=blind?'0%':noisy(B.trust)+'%';
+  $('#bSan').parentElement.classList.toggle('blind',blind);$('#bTru').parentElement.classList.toggle('blind',blind);
+  $('#lSan').textContent=blind?'理智 ？':'理智';$('#lTru').textContent=blind?'信任 ？':'信任';
+  $('#oPips').innerHTML='對手 '+[...ch.parts,'heart'].map((p,i)=>`<span class="org ${i<B.oLost?'lost':''}" title="${ON[p]}">${ON[p]}</span>`).join('');
+  $('#bidBanner').innerHTML=`<small>桌上共 ${total()} 顆</small>`;
+  const cl=B.bid&&B.bid.by==='o'?B.bid:null,ck=cl?cl.q+'/'+cl.f+'/'+B.round:'';
+  if(ck!==SC.claimKey){SC.claimKey=ck;SC.claimT=performance.now();}
+  SC.claim=cl?{q:cl.q,f:cl.f}:null;
+  ui.q=clamp(ui.q,1,total());
+  if(!W.bid||W.bid.n!==Math.max(2,total())) buildBidWheel();
+  else{
+    if(!W.bid.outer.dragging) ringSet(W.bid.outer,ui.f-1);
+    if(!W.bid.inner.dragging) ringSet(W.bid.inner,ui.q-1);
+  }
+  if(!W.talk) buildTalkWheel();
+  W.bid.svg.classList.toggle('off',!my);
+  W.talk.svg.classList.toggle('off',!my);
+  $('#callBtn').classList.toggle('dis',!(my&&B.bid&&B.bid.by==='o'));
+  syncBid();syncTalk();
+  const capHit=B.itemUsed>=itemCap();
+  $('#items').innerHTML=Object.keys(ITEMS).map(k=>`<button type="button" class="itm" data-k="${k}" title="${ITEMS[k].name}：${ITEMS[k].desc}" aria-label="${ITEMS[k].name}，剩 ${S.items[k]}" ${(!my||!S.items[k]||capHit)?'disabled':''}>${IG[k]}<i>×${S.items[k]}</i></button>`).join('')+`<span class="cap" title="本回合道具使用次數">用 ${B.itemUsed}/${itemCap()}</span>`;
+  applyGlitchUI();
+}
+
+function hallucinate(){
+  const t=Math.max(1,total()),q=rnd(1,t),f=rnd(1,6);
+  if(Math.random()<.5){
+    SC.ghostClaim={q,f,until:performance.now()+900};SC.claimT=performance.now();
+    const el=$('#bidBanner');el.classList.add('ghost');el.innerHTML=`<small>桌上共 ${rnd(2,12)} 顆</small>`;
+    setTimeout(()=>{el.classList.remove('ghost');render();},900);
+  }else{
+    const txt=pick([`他手上其實有 ${rnd(0,B.oHp)} 顆「${f}」……`,'你剛剛看漏了一顆。','他在笑。','骰子在動。',`他剛剛叫的是 ${q} 顆「${f}」。`]);
+    log(txt,'ghost');
+  }
+}
+function initBattleUI(){
+  bindWheel($('#bidWheel'),rad=>!W.bid?null:(rad>=131?W.bid.outer:(rad>=70?W.bid.inner:null)));
+  bindWheel($('#talkWheel'),rad=>!W.talk?null:(rad>=84?W.talk.ring:null));
+  $('#bidWheel').addEventListener('click',e=>{if(e.target.closest('#callBtn')) playerCall();});
+  $('#talkWheel').addEventListener('click',e=>{if(e.target.closest('#talkBtn')&&isMine()&&cardOk(ui.card)) useCard(CARDS[ui.card].id);});
+  $('#btnBid').onclick=playerBid;
+  const step=(r,d)=>{if(!r||r.dragging) return;ringSet(r,r.k+d);AU.click(r.snd);r.onChange(r.idx);const sv0=r===(W.bid&&W.bid.outer)||r===(W.bid&&W.bid.inner)?$('#bidWheel'):null;if(sv0){sv0.dataset.act=r.tag||'';clearTimeout(sv0._at);sv0._at=setTimeout(()=>{delete sv0.dataset.act;},700);}};
+  $('#bidWheel').addEventListener('keydown',e=>{
+    if(!W.bid||!isMine()) return;
+    const onC=e.target.closest&&e.target.closest('#callBtn');
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();if(onC) playerCall();else playerBid();return;}
+    const m={ArrowLeft:[W.bid.outer,-1],ArrowRight:[W.bid.outer,1],ArrowUp:[W.bid.inner,1],ArrowDown:[W.bid.inner,-1]}[e.key];
+    if(m){e.preventDefault();step(m[0],m[1]);}
+  });
+  $('#talkWheel').addEventListener('keydown',e=>{
+    if(!W.talk||!isMine()) return;
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();if(cardOk(ui.card)) useCard(CARDS[ui.card].id);return;}
+    const d={ArrowLeft:-1,ArrowUp:-1,ArrowRight:1,ArrowDown:1}[e.key];
+    if(d){e.preventDefault();step(W.talk.ring,d);}
+  });
+  $('#items').addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(b&&!b.disabled) useItem(b.dataset.k);});
+  setInterval(()=>{
+    if($('#scBattle').hidden||!B.ch||!isMine()) return;
+    if(Math.random()>=glitchLv().op*.2) return;
+    const rs=[W.bid&&W.bid.outer,W.bid&&W.bid.inner,W.talk&&W.talk.ring].filter(r=>r&&!r.dragging);
+    const r=rs[Math.floor(Math.random()*rs.length)];
+    if(r){ringSet(r,r.k+(Math.random()<.5?1:-1));AU.click(r.snd);r.onChange(r.idx);}
+  },1200);
+  setInterval(()=>{
+    if($('#scBattle').hidden||!B.ch||B.over||glitchLv().stg<3||Math.random()>.45) return;
+    hallucinate();
+  },3200);
+  $('#btnLog').onclick=()=>{
+    const p=$('#logPanel');p.hidden=!p.hidden;$('#btnLog').setAttribute('aria-expanded',String(!p.hidden));
+    if(!p.hidden) p.scrollTop=p.scrollHeight;
+  };
+}
+/* ---------- Losing a die: bet odd/even for the part at stake ---------- */
+const BET_COST=[30,60];
+let betRot=0;
+function buildBetWheel(){
+  const svg=$('#betWheel');svg.innerHTML='';
+  const g=sv('g',{id:'betG'},svg);
+  for(let i=0;i<12;i++){
+    const c=i*30,s=sv('g',{},g);
+    sv('path',{d:sectorPath(72,186,c-15,c+15),class:'bs '+((i+1)%2?'od':'ev')},s);
+    const [tx,ty]=polar(150,c);
+    sv('text',{x:tx,y:ty,class:'bn','font-size':36,transform:`rotate(${c} ${tx} ${ty})`},s).textContent=i+1;
+  }
+  sv('circle',{cx:200,cy:200,r:64,class:'bc'},svg);
+  sv('text',{x:200,y:200,id:'betNum',class:'bnum','font-size':64},svg);
+  sv('polygon',{points:'184,0 216,0 200,26',class:'mk'},svg);
+  g.style.transition='none';g.style.transform=`rotate(${betRot}deg)`;
+}
+function betSpin(){
+  const n=rnd(1,12),g=$('#betG');
+  const m=mod(betRot,360),t=mod(-(n-1)*30,360);
+  betRot+=mod(t-m,360)+360*5;
+  g.style.transition=reduceMotion?'none':'transform 2.4s cubic-bezier(.12,.7,.15,1)';
+  g.style.transform=`rotate(${betRot}deg)`;
+  if(!reduceMotion){let d=40,e=0;const tk=()=>{if(e>2300) return;AU.click(2200);e+=d;d*=1.13;setTimeout(tk,d);};tk();}
+  return sleep(reduceMotion?50:2500).then(()=>n);
+}
+const ask=(btnEl,html,ids)=>new Promise(r=>{
+  btnEl.innerHTML=html;
+  ids.forEach(([id,v])=>{const b=$('#'+id);b.onclick=()=>r(v);});
+  const first=btnEl.querySelector('button:not(:disabled)');if(first) first.focus();
+});
+/* Resolves 'win' (part is seized for this fight only) or 'lose' (part is cut off). */
+async function betWheel(key){
+  const el=$('#bet'),msg=$('#betMsg'),btn=$('#betBtn');
+  buildBetWheel();$('#betNum').textContent='';
+  el.hidden=false;
+  $('#betT').innerHTML=`你輸了一顆骰子。賭注：你的「<b>${ON[key]}</b>」`;
+  msg.innerHTML='押對：被<b>沒收</b>，本局結束後還回來。<br>押錯：被<b class="nb">切除</b>，永久失去。';
+  const pick=await ask(btn,'<button type="button" id="bOdd" class="bo">押單</button><button type="button" id="bEven" class="be">押雙</button>',[['bOdd','odd'],['bEven','even']]);
+  let tries=0;
+  for(;;){
+    btn.innerHTML='';msg.textContent='輪盤轉動中……';
+    const n=await betSpin();
+    const odd=n%2===1,win=(pick==='odd')===odd,nm=`${n}（${odd?'單':'雙'}）`;
+    $('#betNum').textContent=n;
+    log(`輪盤轉出 ${nm}。你押${pick==='odd'?'單':'雙'}。`,win?'sys':'warn');
+    if(win){msg.textContent=`${nm}。你押對了。`;await sleep(1200);el.hidden=true;return 'win';}
+    msg.textContent=`${nm}。你押錯了。`;
+    const cost=BET_COST[tries],can=cost!==undefined&&S.gold>=cost;
+    const act=await ask(btn,`<button type="button" id="bBribe" class="danger" ${can?'':'disabled'}>賄賂重轉${cost!==undefined?`　${cost} 金`:'　次數用完'}</button><button type="button" id="bFate">認命</button>`,[['bBribe','bribe'],['bFate','fate']]);
+    if(act==='fate'){el.hidden=true;return 'lose';}
+    S.gold-=cost;tries++;renderHud();log(`你塞了 ${cost} 金，要求重轉。`,'me');
+  }
+}
+
+/* ---------- Cut / seize animations ---------- */
+async function partAnim(key,kind){
+  const el=$('#cut');
+  el.querySelectorAll('.half span').forEach(s=>{s.textContent=ON[key];});
+  $('#cutLbl').textContent=kind==='cut'?`你失去了「${ON[key]}」。`:`「${ON[key]}」被沒收了。`;
+  el.className='cut '+kind;el.hidden=false;void el.offsetWidth;el.classList.add('go');
+  SC.freeze=true;AU.hit();AU.cut(.9);
+  if(kind==='cut'){vpFx('invert',120);setTimeout(()=>vpFx('shake',500),520);}
+  await sleep(reduceMotion?600:(kind==='cut'?2100:1300));
+  el.hidden=true;el.className='cut';SC.freeze=false;
+}
+/* ---------- Screens & HUD ---------- */
+const SCREENS=['scTitle','scMap','scBattle','scShop','scEvent','scTx','scEnd'];
+function show(id){
+  SCREENS.forEach(s=>{$('#'+s).hidden=s!==id;});
+  $('#hud').hidden=id==='scTitle';
+  AU.mode=id==='scBattle'?'battle':'calm';
+  if(id!=='scBattle') AU.tension=0;
+  renderHud();
+  window.scrollTo(0,0);
+}
+function renderHud(){
+  if(!S.body) return;
+  const nk=nextLoseKey();
+  $('#hBody').innerHTML=ORGS.map(k=>`<span class="org ${st(k)} ${S.body.slots[k].seized?'seized':''} ${k===nk?'next':''}" title="${ON[k]}：${orgState(k)}。${effectText(k)}${k===nk?'（下一個會被奪走）':''}">${ON[k]}</span>`).join('');
+  $('#hGold').textContent=S.gold;
+  $('#hSin').textContent=S.sin;
+  $('#hFloor').textContent=(S.cur?S.cur.l+1:0)+'/6';
+  $('#hSan').textContent=S.san;
+  $('#hSanBar').style.width=S.san+'%';
+  $('#hud').classList.toggle('low',S.san<40);
+  AU.setMuffle(lostK('ear'));
+}
+function endScreen(title,body,btn,fn,cls=''){
+  const el=$('#scEnd');
+  el.innerHTML=`<h2 class="${cls}">${title}</h2><p>${body}</p><div><button type="button" id="endBtn" class="danger">${btn}</button></div>`;
+  $('#endBtn').onclick=fn;
+  show('scEnd');
+}
+
+/* ---------- Route map ---------- */
+function genMap(){
+  const counts=[2,3,3,3,2,1],layers=[];let id=0;
+  counts.forEach((n,l)=>{
+    const arr=[];
+    for(let i=0;i<n;i++){
+      let type;
+      if(l===0) type='battle'; else if(l===5) type='boss';
+      else{const r=Math.random();type=r<.5?'battle':r<.72?'shop':'event';}
+      const node={id:id++,l,x:(i+1)/(n+1),type,conns:[],opp:null};
+      if(type==='battle') node.opp=pick(l<=1?[CH.debtor,CH.kid]:[CH.woman,CH.elder]);
+      if(type==='boss') node.opp=CH.dealer;
+      arr.push(node);
+    }
+    layers.push(arr);
+  });
+  const mid=layers.slice(1,5).flat();
+  if(!mid.some(n=>n.type==='shop')){const n=pick(mid);n.type='shop';n.opp=null;}
+  if(!mid.some(n=>n.type==='event')){const n=pick(mid.filter(m=>m.type!=='shop'));n.type='event';n.opp=null;}
+  for(let l=0;l<5;l++){
+    const A=layers[l],N=layers[l+1];
+    A.forEach(a=>{
+      const s=[...N].sort((u,v)=>Math.abs(u.x-a.x)-Math.abs(v.x-a.x));
+      a.conns.push(s[0].id);
+      if(s[1]&&Math.random()<.45) a.conns.push(s[1].id);
+    });
+    N.forEach(b=>{
+      if(!A.some(a=>a.conns.includes(b.id))){
+        [...A].sort((u,v)=>Math.abs(u.x-b.x)-Math.abs(v.x-b.x))[0].conns.push(b.id);
+      }
+    });
+  }
+  S.layers=layers;S.nodes=layers.flat();
+}
+function renderMap(){
+  const W=400,H=560,X=n=>n.x*W,Y=n=>H-50-n.l*((H-100)/5);
+  const reach=S.cur?S.cur.conns:S.layers[0].map(n=>n.id);
+  let s='';
+  S.nodes.forEach(n=>n.conns.forEach(cid=>{
+    const m=S.nodes[cid];
+    const on=(S.visited[n.id]&&S.visited[m.id])||(S.cur&&S.cur.id===n.id);
+    s+=`<line class="${on?'on':''}" x1="${X(n)}" y1="${Y(n)}" x2="${X(m)}" y2="${Y(m)}"/>`;
+  }));
+  const lab={battle:'戰',shop:'店',event:'事',boss:'王'};
+  S.nodes.forEach(n=>{
+    const open=reach.includes(n.id);
+    const state=S.cur&&S.cur.id===n.id?'now':S.visited[n.id]?'done':open?'open':'locked';
+    s+=`<g class="node ${n.type} ${state}" data-id="${n.id}" ${open?`tabindex="0" role="button" aria-label="${lab[n.type]}"`:''}><rect x="${X(n)-24}" y="${Y(n)-24}" width="48" height="48"/><text x="${X(n)}" y="${Y(n)}">${lab[n.type]}</text></g>`;
+  });
+  $('#mapSvg').innerHTML=s;
+}
+function renderBody(){
+  const rows=S.body.order.map((k,i)=>`<div class="brow"><span class="org ${st(k)}">${ON[k]}</span><div class="bt"><b>${orgState(k)}</b><span>${effectText(k)}</span>${lostK(k)?`<span class="bw">荷官戰：${ORG_INFO[k].boss}。</span>`:''}</div><div class="bm"><button type="button" data-i="${i}" data-d="-1" ${i===0?'disabled':''} aria-label="${ON[k]}提前">▲</button><button type="button" data-i="${i}" data-d="1" ${i===3?'disabled':''} aria-label="${ON[k]}延後">▼</button></div></div>`).join('');
+  $('#bodyPanel').innerHTML=`<h3>你的身體</h3><p class="mut sm">輸掉骰子時，由上往下依序被奪走。最後一個只能是心。可以在這裡調整順序。</p>${rows}<div class="brow"><span class="org ${st('heart')}">心</span><div class="bt"><b>${orgState('heart')}</b><span>${ORG_INFO.heart.ok}</span></div><div class="bm"></div></div><p class="mut sm" style="margin-top:8px">修復剩 ${MAX_FIX-S.repairs} 次，理智 ${S.san}。</p>`;
+}
+function enterNode(n){
+  S.cur=n;S.visited[n.id]=1;
+  if(n.type==='battle'||n.type==='boss') startBattle(n);
+  else if(n.type==='shop') renderShop();
+  else renderEvent();
+}
+function toMap(){
+  if(S.cur&&S.cur.type==='boss') return showEnd('win');
+  show('scMap');renderMap();renderBody();
+}
+
+/* ---------- Shop ---------- */
+function shopWares(){
+  const w=[{k:'peek',price:30},{k:'reroll',price:25},{k:'gag',price:35},
+    {k:'calm',name:'鎮靜劑',desc:'理智 +25。',price:30,ok:()=>S.san<100}];
+  ORGS.slice(0,4).forEach(k=>{if(lostK(k)) w.push({k:'fix_'+k,name:'修復'+ON[k],desc:`把失去的${ON[k]}接回去，多一顆骰子，失去的新能力也會消失。整局最多 ${MAX_FIX} 次，剩 ${MAX_FIX-S.repairs} 次。`,price:REPAIR_PRICE,ok:()=>S.repairs<MAX_FIX});});
+  ORGS.slice(0,4).forEach(k=>{if(S.body.slots[k].st==='lost'&&S.body.slots[k].pledged) w.push({k:'redeem_'+k,name:'贖回'+ON[k],desc:`把抵押出去的${ON[k]}贖回來。不算修復次數。`,price:60});});
+  const nk=nextLoseKey();
+  w.push({k:'pawn',name:'典當器官',desc:nk&&nk!=='heart'?`依順序奪走下一個器官（${ON[nk]}），換 45 金，理智 −8。`:'沒有可以典當的器官。',price:0,ok:()=>!!nk&&nk!=='heart'});
+  return w;
+}
+function renderShop(msg){
+  $('#scShop').innerHTML=`<h2>地下商店</h2><p class="mut">老闆沒有抬頭。「要買就快點。」</p>${msg?`<p class="res">${msg}</p>`:''}<div class="shop">${shopWares().map(w=>{
+    const nm=w.name||ITEMS[w.k].name,ds=w.desc||ITEMS[w.k].desc;
+    const dis=w.price>S.gold||(w.ok&&!w.ok());
+    return `<button type="button" data-k="${w.k}" ${dis?'disabled':''}><b>${nm}</b><span>${ds}</span><span class="price">${w.k==='pawn'?'＋45 金':w.price+' 金'}</span></button>`;
+  }).join('')}</div><div><button type="button" id="shopLeave">離開</button></div>`;
+  show('scShop');
+}
+function buy(k){
+  const w=shopWares().find(x=>x.k===k);if(!w||(w.ok&&!w.ok())) return;
+  if(k==='pawn'){
+    const o=loseNext();S.gold+=45;dSan(-8);
+    return renderShop(`老闆把錢推過來，沒有說話。你失去了「${ON[o]}」。（金 +45，理智 −8）`);
+  }
+  if(S.gold<w.price) return;
+  S.gold-=w.price;
+  if(k==='calm'){dSan(25);return renderShop('針劑推進去，世界安靜了一點。（理智 +25）');}
+  if(k.startsWith('redeem_')){
+    const o=k.slice(7);S.body.slots[o]={st:'ok'};
+    return renderShop(`${ON[o]}回到你身上了。`);
+  }
+  if(k.startsWith('fix_')){
+    const o=k.slice(4);S.body.slots[o]={st:'ok'};S.repairs++;
+    return renderShop(`${ON[o]}被接回去了。你多了一顆骰子。（修復剩 ${MAX_FIX-S.repairs} 次）`);
+  }
+  S.items[k]++;
+  renderShop(`買了「${ITEMS[k].name}」。`);
+}
+
+/* ---------- Events ---------- */
+const EVENTS=[
+  {t:'無人的賭桌',x:'一張空桌，桌上有一袋錢。紙條寫著：「拿走的人，替他還債。」',c:[
+    {l:'拿走錢',run(){S.gold+=45;S.sin++;dSan(-5);return '袋子很沉。你沒有問是誰的債。（金 +45，罪孽 +1，理智 −5）';}},
+    {l:'離開',run(){return '你走了。桌上的錢沒有動。';}}]},
+  {t:'地下診所',x:'白布簾後的男人說，他能讓你睡一覺。「便宜，或者免費。」',c:[
+    {l:'付 25 金',ok:()=>S.gold>=25&&S.san<100,run(){S.gold-=25;dSan(20);return '針很痛，但世界安靜了一會兒。（金 −25，理智 +20）';}},
+    {l:'付 70 金，請他修復身體',ok:()=>S.gold>=70&&S.repairs<MAX_FIX&&ORGS.slice(0,4).some(lostK),run(){
+      const o=pick(ORGS.slice(0,4).filter(lostK));S.gold-=70;S.repairs++;S.body.slots[o]={st:'ok'};
+      return `他把你的${ON[o]}接了回去。手法很粗暴。（金 −70，多一顆骰子，修復剩 ${MAX_FIX-S.repairs} 次）`;}},
+    {l:'免費治療',run(){
+      if(Math.random()<.6){dSan(25);return '他笑了。你睡得很沉。（理智 +25）';}
+      const nk=nextLoseKey();
+      if(nk&&nk!=='heart'){const o=loseNext();dSan(-5);return `他沒有笑。你醒來時少了「${ON[o]}」。（理智 −5）`;}
+      dSan(-15);return '他沒有笑。你醒來時，頭很痛。（理智 −15）';}}]},
+  {t:'空房間',x:'一張乾淨的床。牆上有人用指甲刻了一句：「睡著的人先死。」',c:[
+    {l:'睡一覺',run(){if(Math.random()<.7){dSan(25);return '你睡著了。夢裡沒有骰子。（理智 +25）';}dSan(-8);return '你夢見自己一直在輸。醒來時手還在發抖。（理智 −8）';}},
+    {l:'翻找房間',run(){S.gold+=20;return '床墊裡塞著幾張鈔票。（金 +20）';}}]},
+  {t:'收音機',x:'牆上的收音機在念你的名字。聲音很平靜，像在讀帳單。',c:[
+    {l:'聽到最後',run(){S.items.peek++;dSan(-6);return '最後一句是下一個對手的習慣。（獲得「偷看」，理智 −6）';}},
+    {l:'關掉',run(){dSan(-3);return '房間安靜了。但耳鳴沒有停。（理智 −3）';}},
+    {l:'砸爛它',run(){S.gold+=15;return '外殼裡塞著幾張皺掉的鈔票。（金 +15）';}}]}
+];
+let lastEvt=-1;
+function renderEvent(){
+  let i;do{i=rnd(0,EVENTS.length-1);}while(i===lastEvt);
+  lastEvt=i;const e=EVENTS[i],el=$('#scEvent');
+  el.innerHTML=`<h2>${e.t}</h2><p>${e.x}</p><div class="evt">${e.c.map((c,j)=>`<button type="button" data-j="${j}" ${c.ok&&!c.ok()?'disabled':''}>${c.l}</button>`).join('')}</div>`;
+  el.onclick=ev=>{
+    const b=ev.target.closest('button[data-j]');if(!b||b.disabled) return;
+    const r=e.c[+b.dataset.j].run();el.onclick=null;
+    el.innerHTML=`<h2>${e.t}</h2><p class="res">${r}</p><div><button type="button" id="evtGo">繼續</button></div>`;
+    $('#evtGo').onclick=toMap;renderHud();
+  };
+  show('scEvent');
+}
+
+/* ---------- Results, transplant & endings ---------- */
+function finish(kind){
+  restoreSeized();
+  const ch=B.ch;
+  if(kind==='kill'){
+    const g=50+ch.tier*15;S.gold+=g;S.sin++;
+    if(ch.organ) return renderTx(ch,g);
+    endScreen(`${ch.name}倒下了`,`金 +${g}　罪孽 +1`,'繼續',toMap,'kill');
+  }else{
+    const g=20+ch.tier*5,k=pick(['peek','reroll','gag']);S.gold+=g;S.items[k]++;
+    const sp=S.spared[S.spared.length-1];
+    endScreen(`${ch.name}離開了`,`金 +${g}　獲得「${ITEMS[k].name}」<br>你們都活著離開了。${sp?`<br><span class="mut sm">條件：${sp.how}。</span>`:''}`,'繼續',toMap);
+  }
+}
+function renderTx(ch,g){
+  const o=ch.organ,k=o.k,T=TX[k],was=lostK(k),el=$('#scTx');
+  el.innerHTML=`<h2 class="kill">${ch.name}倒下了</h2>
+    <p>金 +${g}　罪孽 +1<br>他的「${o.name}」還留在桌上。</p>
+    <div class="box" style="max-width:520px"><b style="font-family:var(--fd);letter-spacing:.1em">${o.name}（${ON[k]}）</b>
+      <p>${T.up}。<br><span class="nb">代價：${T.down}。</span></p>
+      <p class="mut sm">${was?`你的${ON[k]}已經失去。移植後會多出一顆骰子。`:`會取代你現在的${ON[k]}（${orgState(k)}）。`}</p></div>
+    <div class="evt"><button type="button" id="txYes" class="danger">移植</button><button type="button" id="txNo">不碰它</button></div>`;
+  $('#txYes').onclick=()=>{
+    S.body.slots[k]={st:'tx',name:o.name};renderHud();
+    el.innerHTML=`<h2>移植完成</h2><p class="res">你換上了「${o.name}」。${was?'你多了一顆骰子。':''}</p><div><button type="button" id="txGo" class="danger">繼續</button></div>`;
+    $('#txGo').onclick=toMap;
+  };
+  $('#txNo').onclick=toMap;
+  show('scTx');
+}
+function showEnd(kind){
+  if(kind==='dead') return endScreen('你死了',`你的心臟停了。對面的人收走了你的籌碼。<br>罪孽 ${S.sin}`,'重新開始',resetGame,'kill');
+  const lostN=ORGS.filter(lostK).length;
+  const t=S.sin===0?'你一個人也沒有殺，就走出了這棟建築。沒有人相信這件事。'
+    :`你走出來了。身後有 ${S.sin} 張桌子再也沒有人坐。${S.sin>2?'你已經不太記得他們的臉。':''}`;
+  endScreen('你離開了',`${t}<br>你身上少了 ${lostN} 個原本的器官。剩下的金：${S.gold}`,'再來一次',resetGame,S.sin?'kill':'');
+}
+function resetGame(){
+  Object.assign(S,{gold:40,sin:0,san:100,repairs:0,spared:[],collapsed:false,items:{peek:1,reroll:0,gag:0},cur:null,visited:{},body:freshBody()});
+  genMap();show('scMap');renderMap();renderBody();applyGlitchUI();
+}
+
+/* ---------- Boot ---------- */
+$('#btnStart').onclick=()=>{AU.init();resetGame();};
+$('#btnMute').onclick=()=>{AU.setMute(!AU.muted);$('#btnMute').textContent=AU.muted?'音 OFF':'音 ON';};
+const mapClick=e=>{const g=e.target.closest('.node.open');if(g) enterNode(S.nodes[+g.dataset.id]);};
+$('#mapSvg').addEventListener('click',mapClick);
+$('#mapSvg').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();mapClick(e);}});
+$('#bodyPanel').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-i]');if(!b||b.disabled) return;
+  const i=+b.dataset.i,d=+b.dataset.d,o=S.body.order;
+  [o[i],o[i+d]]=[o[i+d],o[i]];renderBody();
+});
+$('#scShop').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b||b.disabled) return;
+  if(b.id==='shopLeave') toMap(); else buy(b.dataset.k);
+});
+initBattleUI();
+show('scTitle');
+</script>
+
+</body></html>
